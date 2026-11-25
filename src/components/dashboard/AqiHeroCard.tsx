@@ -1,20 +1,34 @@
 import React from 'react';
 import { PollutantTelemetry } from '../../types/aqi';
-import { getAqiCategoryColor } from '../../services/openMeteoApi';
-import { Wind, Droplets, Thermometer, AlertCircle, Clock, Database } from 'lucide-react';
+import { getAqiCategoryColor, INDIAN_CITIES } from '../../services/openMeteoApi';
+import { Wind, Droplets, Thermometer, AlertCircle, Clock, Database, MapPin, Navigation } from 'lucide-react';
 
 interface AqiHeroCardProps {
   telemetry: PollutantTelemetry;
   cityName: string;
+  activeCityId?: string;
+  onSelectCityId?: (cityId: string) => void;
+  isGpsLocated?: boolean;
 }
 
-export const AqiHeroCard: React.FC<AqiHeroCardProps> = ({ telemetry, cityName }) => {
+export const AqiHeroCard: React.FC<AqiHeroCardProps> = ({
+  telemetry,
+  cityName,
+  activeCityId,
+  onSelectCityId,
+  isGpsLocated = false,
+}) => {
   const categoryColor = getAqiCategoryColor(telemetry.category);
   const formattedTime = new Date(telemetry.timestamp).toLocaleTimeString([], {
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
   });
+
+  const popularCityIds = [
+    'delhi', 'mumbai', 'bengaluru', 'kolkata', 'hyderabad', 
+    'chennai', 'noida', 'pune', 'lucknow', 'jaipur', 'ahmedabad', 'patna'
+  ];
 
   return (
     <section 
@@ -23,7 +37,7 @@ export const AqiHeroCard: React.FC<AqiHeroCardProps> = ({ telemetry, cityName })
     >
       {/* Background ambient glow matching category color */}
       <div 
-        className="absolute -right-20 -top-20 w-80 h-80 rounded-full blur-3xl opacity-15 pointer-events-none"
+        className="absolute -right-20 -top-20 w-80 h-80 rounded-full blur-3xl opacity-20 pointer-events-none transition-all duration-700"
         style={{ backgroundColor: categoryColor.hex }}
         aria-hidden="true"
       />
@@ -32,20 +46,30 @@ export const AqiHeroCard: React.FC<AqiHeroCardProps> = ({ telemetry, cityName })
         {/* Left: Score Gauge & Category */}
         <div className="flex items-start sm:items-center gap-6">
           <div 
-            className={`flex flex-col items-center justify-center w-28 h-28 sm:w-36 sm:h-36 rounded-2xl border-2 ${categoryColor.border} ${categoryColor.bg} shadow-lg shrink-0`}
+            className={`flex flex-col items-center justify-center w-28 h-28 sm:w-36 sm:h-36 rounded-2xl border-2 ${categoryColor.border} ${categoryColor.bg} shadow-lg shrink-0 transition-all`}
           >
             <span className="text-xs uppercase font-extrabold tracking-widest text-slate-400">AQI</span>
             <span className="text-4xl sm:text-5xl font-black text-white tracking-tight" aria-label={`Air Quality Index: ${telemetry.aqi}`}>
               {telemetry.aqi}
             </span>
-            <span className={`text-xs font-bold px-2 py-0.5 rounded-full mt-1 ${categoryColor.text}`}>
+            <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full mt-1 ${categoryColor.text}`}>
               {telemetry.category}
             </span>
           </div>
 
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <span className="text-xs font-semibold uppercase tracking-wider text-emerald-400">Atmospheric Telemetry</span>
+              {isGpsLocated ? (
+                <span className="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1">
+                  <Navigation className="w-3.5 h-3.5 text-emerald-400 animate-pulse" aria-hidden="true" />
+                  Hyperlocal GPS Active
+                </span>
+              ) : (
+                <span className="text-xs font-semibold uppercase tracking-wider text-emerald-400 flex items-center gap-1">
+                  <MapPin className="w-3.5 h-3.5" aria-hidden="true" />
+                  Atmospheric Telemetry
+                </span>
+              )}
               <span className="text-slate-600">•</span>
               <span className="text-xs text-slate-400 flex items-center gap-1">
                 <Clock className="w-3 h-3" aria-hidden="true" />
@@ -90,8 +114,37 @@ export const AqiHeroCard: React.FC<AqiHeroCardProps> = ({ telemetry, cityName })
         </div>
       </div>
 
+      {/* Quick City Navigation Pills */}
+      {onSelectCityId && (
+        <div className="mt-5 pt-4 border-t border-slate-800/60 flex items-center gap-2 overflow-x-auto scrollbar-none pb-1">
+          <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 shrink-0">
+            Quick Cities:
+          </span>
+          <div className="flex items-center gap-1.5 shrink-0">
+            {popularCityIds.map((cId) => {
+              const city = INDIAN_CITIES.find(c => c.id === cId);
+              if (!city) return null;
+              const isSelected = activeCityId === cId;
+              return (
+                <button
+                  key={cId}
+                  onClick={() => onSelectCityId(cId)}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all shrink-0 ${
+                    isSelected
+                      ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 ring-1 ring-emerald-500/50'
+                      : 'bg-slate-950/60 hover:bg-slate-800 border border-slate-800 text-slate-300 hover:text-white'
+                  }`}
+                >
+                  {city.name.split(' ')[0]}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       {/* Pollutant Detail Grid */}
-      <div className="mt-6 pt-6 border-t border-slate-800/80 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
+      <div className="mt-5 pt-5 border-t border-slate-800/80 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
         <div className="bg-slate-950/40 p-3 rounded-xl border border-slate-800/60">
           <div className="flex items-center justify-between text-xs text-slate-400">
             <span>PM2.5</span>
@@ -152,12 +205,12 @@ export const AqiHeroCard: React.FC<AqiHeroCardProps> = ({ telemetry, cityName })
         <div className="flex items-center gap-1.5">
           <Database className="w-3.5 h-3.5 text-emerald-400" aria-hidden="true" />
           <span>
-            Telemetry Source: <strong className="text-slate-300">{telemetry.source === 'live_open_meteo' ? 'Open-Meteo European/US Atmospheric API' : 'Calibrated Historical CPCB Winter Baseline'}</strong>
+            Telemetry Source: <strong className="text-slate-300">{telemetry.source === 'live_open_meteo' ? 'Open-Meteo European/US Atmospheric API (Live)' : 'Calibrated Historical CPCB Winter Baseline'}</strong>
           </span>
         </div>
         <div className="flex items-center gap-1.5 text-slate-400">
           <AlertCircle className="w-3.5 h-3.5 text-amber-400" aria-hidden="true" />
-          <span>CPCB National Air Quality Standard Calibration</span>
+          <span>CPCB National Ambient Air Quality Standard (NAAQS)</span>
         </div>
       </div>
     </section>

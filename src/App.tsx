@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { CityPreset, PollutantTelemetry, VulnerabilityProfile, HourlyForecast } from './types/aqi';
-import { INDIAN_CITIES, fetchLiveAirQuality, generateDiurnalForecast } from './services/openMeteoApi';
+import { INDIAN_CITIES, fetchLiveAirQuality, generateDiurnalForecast, reverseGeocodeLocation } from './services/openMeteoApi';
 import { PERSONA_PROFILES, calculatePersonalRisk } from './engines/vulnerabilityEngine';
 import { calculateIaqMitigation } from './engines/iaqMitigationEngine';
 import { Header } from './components/layout/Header';
@@ -22,6 +22,7 @@ export const App: React.FC = () => {
     generateDiurnalForecast(INDIAN_CITIES[0].defaultTelemetry.aqi)
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isGpsLocated, setIsGpsLocated] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'planner' | 'iaq' | 'commute' | 'assistant'>('overview');
 
   // Load telemetry when city changes
@@ -66,7 +67,21 @@ export const App: React.FC = () => {
     }
   };
 
-  // Handle GPS location auto-detect
+  // Handle city selection
+  const handleSelectCity = (city: CityPreset) => {
+    setIsGpsLocated(false);
+    setSelectedCity(city);
+  };
+
+  // Handle quick city select by ID
+  const handleSelectCityId = (cityId: string) => {
+    const city = INDIAN_CITIES.find(c => c.id === cityId);
+    if (city) {
+      handleSelectCity(city);
+    }
+  };
+
+  // Handle GPS location auto-detect with reverse geocoding
   const handleDetectLocation = () => {
     if (!navigator.geolocation) {
       alert('Geolocation is not supported by your browser.');
@@ -75,31 +90,65 @@ export const App: React.FC = () => {
 
     setIsLoading(true);
     navigator.geolocation.getCurrentPosition(
-      (pos) => {
+      async (pos) => {
         const userLat = pos.coords.latitude;
         const userLon = pos.coords.longitude;
 
-        // Find nearest city in INDIAN_CITIES
-        let nearest = INDIAN_CITIES[0];
-        let minDist = Infinity;
+        try {
+          // Reverse geocode exact locality name
+          const placeName = await reverseGeocodeLocation(userLat, userLon);
 
-        INDIAN_CITIES.forEach((c) => {
-          const d = Math.hypot(c.lat - userLat, c.lon - userLon);
-          if (d < minDist) {
-            minDist = d;
-            nearest = c;
-          }
-        });
+          const gpsCity: CityPreset = {
+            id: `gps-${Date.now()}`,
+            name: `${placeName}`,
+            country: 'India',
+            lat: userLat,
+            lon: userLon,
+            typicalWinterSmogPeak: 'Local atmospheric inversion peak',
+            defaultTelemetry: {
+              aqi: 175,
+              category: 'Poor',
+              pm25: 85,
+              pm10: 160,
+              no2: 50,
+              so2: 18,
+              co: 1.4,
+              o3: 45,
+              temperature: 25,
+              humidity: 60,
+              windSpeed: 8.0,
+              dominantPollutant: 'PM2.5',
+              source: 'offline_telemetry',
+              timestamp: new Date().toISOString(),
+            }
+          };
 
-        setSelectedCity(nearest);
-        setIsLoading(false);
+          setIsGpsLocated(true);
+          setSelectedCity(gpsCity);
+        } catch (err) {
+          console.warn('Reverse geocode error:', err);
+          // Fallback to nearest city if reverse lookup fails
+          let nearest = INDIAN_CITIES[0];
+          let minDist = Infinity;
+          INDIAN_CITIES.forEach((c) => {
+            const d = Math.hypot(c.lat - userLat, c.lon - userLon);
+            if (d < minDist) {
+              minDist = d;
+              nearest = c;
+            }
+          });
+          setIsGpsLocated(true);
+          setSelectedCity(nearest);
+        } finally {
+          setIsLoading(false);
+        }
       },
       (err) => {
         console.warn('Geolocation failed:', err);
         setIsLoading(false);
-        alert('Could not detect location. Please select your city from the dropdown.');
+        alert('Could not access GPS. Please allow location permissions in your browser or select your city from the search bar.');
       },
-      { timeout: 7000 }
+      { timeout: 8000 }
     );
   };
 
@@ -111,11 +160,12 @@ export const App: React.FC = () => {
       {/* Top Navbar */}
       <Header
         selectedCity={selectedCity}
-        onSelectCity={setSelectedCity}
+        onSelectCity={handleSelectCity}
         telemetry={telemetry}
         isLoading={isLoading}
         onRefresh={handleRefresh}
         onDetectLocation={handleDetectLocation}
+        isGpsActive={isGpsLocated}
       />
 
       {/* Main Content Area */}
@@ -197,7 +247,13 @@ export const App: React.FC = () => {
         {/* Tab 1: Overview & Risk Assessment */}
         {activeTab === 'overview' && (
           <div className="space-y-8">
-            <AqiHeroCard telemetry={telemetry} cityName={selectedCity.name} />
+            <AqiHeroCard 
+              telemetry={telemetry} 
+              cityName={selectedCity.name} 
+              activeCityId={selectedCity.id}
+              onSelectCityId={handleSelectCityId}
+              isGpsLocated={isGpsLocated}
+            />
             <PersonaSwitcher selectedPersona={selectedPersona} onSelectPersona={setSelectedPersona} />
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <RiskScoreCard assessment={riskAssessment} persona={selectedPersona} />
@@ -215,7 +271,13 @@ export const App: React.FC = () => {
           <div className="space-y-8">
             <PersonaSwitcher selectedPersona={selectedPersona} onSelectPersona={setSelectedPersona} />
             <SafeWindowPlanner forecasts={forecasts} persona={selectedPersona} />
-            <AqiHeroCard telemetry={telemetry} cityName={selectedCity.name} />
+            <AqiHeroCard 
+              telemetry={telemetry} 
+              cityName={selectedCity.name} 
+              activeCityId={selectedCity.id}
+              onSelectCityId={handleSelectCityId}
+              isGpsLocated={isGpsLocated}
+            />
           </div>
         )}
 
@@ -223,7 +285,13 @@ export const App: React.FC = () => {
         {activeTab === 'iaq' && (
           <div className="space-y-8">
             <IaqMitigationCard plan={iaqPlan} />
-            <AqiHeroCard telemetry={telemetry} cityName={selectedCity.name} />
+            <AqiHeroCard 
+              telemetry={telemetry} 
+              cityName={selectedCity.name} 
+              activeCityId={selectedCity.id}
+              onSelectCityId={handleSelectCityId}
+              isGpsLocated={isGpsLocated}
+            />
           </div>
         )}
 
@@ -231,7 +299,13 @@ export const App: React.FC = () => {
         {activeTab === 'commute' && (
           <div className="space-y-8">
             <EcoCommuteCalculator telemetry={telemetry} />
-            <AqiHeroCard telemetry={telemetry} cityName={selectedCity.name} />
+            <AqiHeroCard 
+              telemetry={telemetry} 
+              cityName={selectedCity.name} 
+              activeCityId={selectedCity.id}
+              onSelectCityId={handleSelectCityId}
+              isGpsLocated={isGpsLocated}
+            />
           </div>
         )}
 

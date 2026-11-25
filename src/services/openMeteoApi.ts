@@ -1,6 +1,7 @@
 import { CityPreset, PollutantTelemetry, AqiCategory, HourlyForecast } from '../types/aqi';
 
 export const INDIAN_CITIES: CityPreset[] = [
+  // --- North & NCR Hotspots ---
   {
     id: 'delhi',
     name: 'Delhi (NCR)',
@@ -50,8 +51,226 @@ export const INDIAN_CITIES: CityPreset[] = [
     }
   },
   {
+    id: 'gurugram',
+    name: 'Gurugram (Haryana)',
+    country: 'India',
+    lat: 28.4595,
+    lon: 77.0266,
+    typicalWinterSmogPeak: 'Peak morning & evening commute',
+    defaultTelemetry: {
+      aqi: 360,
+      category: 'Severe',
+      pm25: 265,
+      pm10: 390,
+      no2: 84,
+      so2: 29,
+      co: 2.7,
+      o3: 44,
+      temperature: 17,
+      humidity: 75,
+      windSpeed: 4.5,
+      dominantPollutant: 'PM2.5',
+      source: 'offline_telemetry',
+      timestamp: new Date().toISOString(),
+    }
+  },
+  {
+    id: 'ghaziabad',
+    name: 'Ghaziabad (Uttar Pradesh)',
+    country: 'India',
+    lat: 28.6692,
+    lon: 77.4538,
+    typicalWinterSmogPeak: 'Dawn thermal inversion (05:30 - 09:00)',
+    defaultTelemetry: {
+      aqi: 405,
+      category: 'Hazardous',
+      pm25: 315,
+      pm10: 450,
+      no2: 96,
+      so2: 38,
+      co: 3.4,
+      o3: 40,
+      temperature: 16,
+      humidity: 82,
+      windSpeed: 3.2,
+      dominantPollutant: 'PM2.5 & Industrial SO2',
+      source: 'offline_telemetry',
+      timestamp: new Date().toISOString(),
+    }
+  },
+  {
+    id: 'lucknow',
+    name: 'Lucknow (Uttar Pradesh)',
+    country: 'India',
+    lat: 26.8467,
+    lon: 80.9462,
+    typicalWinterSmogPeak: 'Night thermal inversion (19:00 - 23:00)',
+    defaultTelemetry: {
+      aqi: 342,
+      category: 'Severe',
+      pm25: 240,
+      pm10: 360,
+      no2: 78,
+      so2: 28,
+      co: 2.4,
+      o3: 38,
+      temperature: 18,
+      humidity: 76,
+      windSpeed: 4.0,
+      dominantPollutant: 'PM2.5 & PM10',
+      source: 'offline_telemetry',
+      timestamp: new Date().toISOString(),
+    }
+  },
+  {
+    id: 'kanpur',
+    name: 'Kanpur (Uttar Pradesh)',
+    country: 'India',
+    lat: 26.4499,
+    lon: 80.3319,
+    typicalWinterSmogPeak: 'Industrial & vehicular dawn smog',
+    defaultTelemetry: {
+      aqi: 355,
+      category: 'Severe',
+      pm25: 260,
+      pm10: 385,
+      no2: 82,
+      so2: 32,
+      co: 2.6,
+      o3: 40,
+      temperature: 18,
+      humidity: 74,
+      windSpeed: 4.1,
+      dominantPollutant: 'PM2.5',
+      source: 'offline_telemetry',
+      timestamp: new Date().toISOString(),
+    }
+  },
+  {
+    id: 'varanasi',
+    name: 'Varanasi (Uttar Pradesh)',
+    country: 'India',
+    lat: 25.3176,
+    lon: 82.9739,
+    typicalWinterSmogPeak: 'River valley winter haze (06:00 - 09:00)',
+    defaultTelemetry: {
+      aqi: 290,
+      category: 'Unhealthy',
+      pm25: 180,
+      pm10: 270,
+      no2: 68,
+      so2: 22,
+      co: 1.8,
+      o3: 46,
+      temperature: 20,
+      humidity: 70,
+      windSpeed: 5.5,
+      dominantPollutant: 'PM2.5',
+      source: 'offline_telemetry',
+      timestamp: new Date().toISOString(),
+    }
+  },
+  {
+    id: 'agra',
+    name: 'Agra (Uttar Pradesh)',
+    country: 'India',
+    lat: 27.1767,
+    lon: 78.0081,
+    typicalWinterSmogPeak: 'Early morning haze (06:00 - 08:30)',
+    defaultTelemetry: {
+      aqi: 310,
+      category: 'Severe',
+      pm25: 215,
+      pm10: 320,
+      no2: 74,
+      so2: 24,
+      co: 2.1,
+      o3: 42,
+      temperature: 19,
+      humidity: 72,
+      windSpeed: 4.8,
+      dominantPollutant: 'PM2.5',
+      source: 'offline_telemetry',
+      timestamp: new Date().toISOString(),
+    }
+  },
+  {
+    id: 'patna',
+    name: 'Patna (Bihar)',
+    country: 'India',
+    lat: 25.5941,
+    lon: 85.1376,
+    typicalWinterSmogPeak: 'Dense river basin inversion smog',
+    defaultTelemetry: {
+      aqi: 375,
+      category: 'Severe',
+      pm25: 280,
+      pm10: 410,
+      no2: 86,
+      so2: 30,
+      co: 2.9,
+      o3: 38,
+      temperature: 19,
+      humidity: 79,
+      windSpeed: 3.6,
+      dominantPollutant: 'PM2.5 & Road Dust',
+      source: 'offline_telemetry',
+      timestamp: new Date().toISOString(),
+    }
+  },
+  {
+    id: 'chandigarh',
+    name: 'Chandigarh (Punjab/Haryana)',
+    country: 'India',
+    lat: 30.7333,
+    lon: 76.7794,
+    typicalWinterSmogPeak: 'Post-harvest and winter cold smog',
+    defaultTelemetry: {
+      aqi: 198,
+      category: 'Poor',
+      pm25: 110,
+      pm10: 195,
+      no2: 52,
+      so2: 18,
+      co: 1.5,
+      o3: 48,
+      temperature: 15,
+      humidity: 72,
+      windSpeed: 6.8,
+      dominantPollutant: 'PM2.5',
+      source: 'offline_telemetry',
+      timestamp: new Date().toISOString(),
+    }
+  },
+  {
+    id: 'jaipur',
+    name: 'Jaipur (Rajasthan)',
+    country: 'India',
+    lat: 26.9124,
+    lon: 75.7873,
+    typicalWinterSmogPeak: 'Desert dust combined with morning traffic',
+    defaultTelemetry: {
+      aqi: 235,
+      category: 'Unhealthy',
+      pm25: 140,
+      pm10: 280,
+      no2: 60,
+      so2: 20,
+      co: 1.6,
+      o3: 55,
+      temperature: 21,
+      humidity: 48,
+      windSpeed: 7.5,
+      dominantPollutant: 'PM10 (Coarse Dust)',
+      source: 'offline_telemetry',
+      timestamp: new Date().toISOString(),
+    }
+  },
+
+  // --- West & Central ---
+  {
     id: 'mumbai',
-    name: 'Mumbai',
+    name: 'Mumbai (Maharashtra)',
     country: 'India',
     lat: 19.0760,
     lon: 72.8777,
@@ -74,32 +293,154 @@ export const INDIAN_CITIES: CityPreset[] = [
     }
   },
   {
-    id: 'kolkata',
-    name: 'Kolkata',
+    id: 'pune',
+    name: 'Pune (Maharashtra)',
     country: 'India',
-    lat: 22.5726,
-    lon: 88.3639,
-    typicalWinterSmogPeak: 'Evening & Night inversion (18:00 - 22:00)',
+    lat: 18.5204,
+    lon: 73.8567,
+    typicalWinterSmogPeak: 'Early morning valley smog (06:30 - 09:00)',
     defaultTelemetry: {
-      aqi: 268,
-      category: 'Unhealthy',
-      pm25: 164,
-      pm10: 245,
-      no2: 66,
-      so2: 24,
-      co: 1.9,
-      o3: 50,
-      temperature: 22,
-      humidity: 74,
-      windSpeed: 6.2,
+      aqi: 148,
+      category: 'Poor',
+      pm25: 64,
+      pm10: 135,
+      no2: 45,
+      so2: 14,
+      co: 1.1,
+      o3: 55,
+      temperature: 24,
+      humidity: 56,
+      windSpeed: 8.5,
       dominantPollutant: 'PM2.5',
       source: 'offline_telemetry',
       timestamp: new Date().toISOString(),
     }
   },
   {
+    id: 'ahmedabad',
+    name: 'Ahmedabad (Gujarat)',
+    country: 'India',
+    lat: 23.0225,
+    lon: 72.5714,
+    typicalWinterSmogPeak: 'Industrial corridor smog (07:00 - 09:30)',
+    defaultTelemetry: {
+      aqi: 225,
+      category: 'Unhealthy',
+      pm25: 135,
+      pm10: 240,
+      no2: 64,
+      so2: 26,
+      co: 1.8,
+      o3: 52,
+      temperature: 26,
+      humidity: 50,
+      windSpeed: 9.0,
+      dominantPollutant: 'PM2.5',
+      source: 'offline_telemetry',
+      timestamp: new Date().toISOString(),
+    }
+  },
+  {
+    id: 'surat',
+    name: 'Surat (Gujarat)',
+    country: 'India',
+    lat: 21.1702,
+    lon: 72.8311,
+    typicalWinterSmogPeak: 'Textile & coastal morning smog',
+    defaultTelemetry: {
+      aqi: 175,
+      category: 'Poor',
+      pm25: 88,
+      pm10: 160,
+      no2: 50,
+      so2: 22,
+      co: 1.3,
+      o3: 56,
+      temperature: 27,
+      humidity: 62,
+      windSpeed: 10.2,
+      dominantPollutant: 'PM2.5',
+      source: 'offline_telemetry',
+      timestamp: new Date().toISOString(),
+    }
+  },
+  {
+    id: 'nagpur',
+    name: 'Nagpur (Maharashtra)',
+    country: 'India',
+    lat: 21.1458,
+    lon: 79.0882,
+    typicalWinterSmogPeak: 'Morning transit rush',
+    defaultTelemetry: {
+      aqi: 140,
+      category: 'Poor',
+      pm25: 60,
+      pm10: 125,
+      no2: 44,
+      so2: 15,
+      co: 1.1,
+      o3: 50,
+      temperature: 25,
+      humidity: 54,
+      windSpeed: 8.8,
+      dominantPollutant: 'PM2.5',
+      source: 'offline_telemetry',
+      timestamp: new Date().toISOString(),
+    }
+  },
+  {
+    id: 'indore',
+    name: 'Indore (Madhya Pradesh)',
+    country: 'India',
+    lat: 22.7196,
+    lon: 75.8577,
+    typicalWinterSmogPeak: 'Traffic rush hours',
+    defaultTelemetry: {
+      aqi: 155,
+      category: 'Poor',
+      pm25: 70,
+      pm10: 140,
+      no2: 48,
+      so2: 16,
+      co: 1.2,
+      o3: 54,
+      temperature: 23,
+      humidity: 52,
+      windSpeed: 9.2,
+      dominantPollutant: 'PM2.5',
+      source: 'offline_telemetry',
+      timestamp: new Date().toISOString(),
+    }
+  },
+  {
+    id: 'bhopal',
+    name: 'Bhopal (Madhya Pradesh)',
+    country: 'India',
+    lat: 23.2599,
+    lon: 77.4126,
+    typicalWinterSmogPeak: 'Early morning lake valley mist',
+    defaultTelemetry: {
+      aqi: 145,
+      category: 'Poor',
+      pm25: 62,
+      pm10: 130,
+      no2: 42,
+      so2: 14,
+      co: 1.0,
+      o3: 48,
+      temperature: 22,
+      humidity: 58,
+      windSpeed: 8.0,
+      dominantPollutant: 'PM2.5',
+      source: 'offline_telemetry',
+      timestamp: new Date().toISOString(),
+    }
+  },
+
+  // --- South ---
+  {
     id: 'bengaluru',
-    name: 'Bengaluru',
+    name: 'Bengaluru (Karnataka)',
     country: 'India',
     lat: 12.9716,
     lon: 77.5946,
@@ -123,7 +464,7 @@ export const INDIAN_CITIES: CityPreset[] = [
   },
   {
     id: 'hyderabad',
-    name: 'Hyderabad',
+    name: 'Hyderabad (Telangana)',
     country: 'India',
     lat: 17.3850,
     lon: 78.4867,
@@ -146,49 +487,243 @@ export const INDIAN_CITIES: CityPreset[] = [
     }
   },
   {
-    id: 'pune',
-    name: 'Pune',
+    id: 'chennai',
+    name: 'Chennai (Tamil Nadu)',
     country: 'India',
-    lat: 18.5204,
-    lon: 73.8567,
-    typicalWinterSmogPeak: 'Early morning valley smog (06:30 - 09:00)',
+    lat: 13.0827,
+    lon: 80.2707,
+    typicalWinterSmogPeak: 'Humid coastal morning haze',
     defaultTelemetry: {
-      aqi: 148,
+      aqi: 112,
       category: 'Poor',
-      pm25: 64,
-      pm10: 135,
-      no2: 45,
+      pm25: 45,
+      pm10: 95,
+      no2: 38,
       so2: 14,
-      co: 1.1,
-      o3: 55,
-      temperature: 24,
-      humidity: 56,
-      windSpeed: 8.5,
+      co: 1.0,
+      o3: 42,
+      temperature: 29,
+      humidity: 75,
+      windSpeed: 13.5,
+      dominantPollutant: 'PM2.5 & Sea Salt',
+      source: 'offline_telemetry',
+      timestamp: new Date().toISOString(),
+    }
+  },
+  {
+    id: 'kochi',
+    name: 'Kochi (Kerala)',
+    country: 'India',
+    lat: 9.9312,
+    lon: 76.2673,
+    typicalWinterSmogPeak: 'Mild coastal morning haze',
+    defaultTelemetry: {
+      aqi: 68,
+      category: 'Moderate',
+      pm25: 22,
+      pm10: 48,
+      no2: 26,
+      so2: 8,
+      co: 0.6,
+      o3: 35,
+      temperature: 30,
+      humidity: 78,
+      windSpeed: 12.0,
       dominantPollutant: 'PM2.5',
       source: 'offline_telemetry',
       timestamp: new Date().toISOString(),
     }
   },
   {
-    id: 'lucknow',
-    name: 'Lucknow',
+    id: 'visakhapatnam',
+    name: 'Visakhapatnam (Andhra Pradesh)',
     country: 'India',
-    lat: 26.8467,
-    lon: 80.9462,
-    typicalWinterSmogPeak: 'Night thermal inversion (19:00 - 23:00)',
+    lat: 17.6868,
+    lon: 83.2185,
+    typicalWinterSmogPeak: 'Port & industrial morning smog',
     defaultTelemetry: {
-      aqi: 342,
-      category: 'Severe',
-      pm25: 240,
-      pm10: 360,
-      no2: 78,
-      so2: 28,
-      co: 2.4,
+      aqi: 128,
+      category: 'Poor',
+      pm25: 52,
+      pm10: 110,
+      no2: 44,
+      so2: 18,
+      co: 1.1,
+      o3: 45,
+      temperature: 27,
+      humidity: 70,
+      windSpeed: 11.0,
+      dominantPollutant: 'PM2.5',
+      source: 'offline_telemetry',
+      timestamp: new Date().toISOString(),
+    }
+  },
+  {
+    id: 'coimbatore',
+    name: 'Coimbatore (Tamil Nadu)',
+    country: 'India',
+    lat: 11.0168,
+    lon: 76.9558,
+    typicalWinterSmogPeak: 'Industrial & vehicular morning peak',
+    defaultTelemetry: {
+      aqi: 82,
+      category: 'Moderate',
+      pm25: 28,
+      pm10: 62,
+      no2: 32,
+      so2: 10,
+      co: 0.7,
       o3: 38,
-      temperature: 18,
-      humidity: 76,
+      temperature: 26,
+      humidity: 62,
+      windSpeed: 10.5,
+      dominantPollutant: 'PM2.5',
+      source: 'offline_telemetry',
+      timestamp: new Date().toISOString(),
+    }
+  },
+
+  // --- East & Northeast ---
+  {
+    id: 'kolkata',
+    name: 'Kolkata (West Bengal)',
+    country: 'India',
+    lat: 22.5726,
+    lon: 88.3639,
+    typicalWinterSmogPeak: 'Evening & Night inversion (18:00 - 22:00)',
+    defaultTelemetry: {
+      aqi: 268,
+      category: 'Unhealthy',
+      pm25: 164,
+      pm10: 245,
+      no2: 66,
+      so2: 24,
+      co: 1.9,
+      o3: 50,
+      temperature: 22,
+      humidity: 74,
+      windSpeed: 6.2,
+      dominantPollutant: 'PM2.5',
+      source: 'offline_telemetry',
+      timestamp: new Date().toISOString(),
+    }
+  },
+  {
+    id: 'bhubaneswar',
+    name: 'Bhubaneswar (Odisha)',
+    country: 'India',
+    lat: 20.2961,
+    lon: 85.8245,
+    typicalWinterSmogPeak: 'Morning inversion haze',
+    defaultTelemetry: {
+      aqi: 142,
+      category: 'Poor',
+      pm25: 60,
+      pm10: 125,
+      no2: 42,
+      so2: 16,
+      co: 1.0,
+      o3: 46,
+      temperature: 26,
+      humidity: 68,
+      windSpeed: 8.2,
+      dominantPollutant: 'PM2.5',
+      source: 'offline_telemetry',
+      timestamp: new Date().toISOString(),
+    }
+  },
+  {
+    id: 'guwahati',
+    name: 'Guwahati (Assam)',
+    country: 'India',
+    lat: 26.1445,
+    lon: 91.7362,
+    typicalWinterSmogPeak: 'Valley smog trapped along Brahmaputra basin',
+    defaultTelemetry: {
+      aqi: 172,
+      category: 'Poor',
+      pm25: 86,
+      pm10: 155,
+      no2: 48,
+      so2: 18,
+      co: 1.3,
+      o3: 40,
+      temperature: 21,
+      humidity: 75,
+      windSpeed: 5.2,
+      dominantPollutant: 'PM2.5',
+      source: 'offline_telemetry',
+      timestamp: new Date().toISOString(),
+    }
+  },
+  {
+    id: 'ranchi',
+    name: 'Ranchi (Jharkhand)',
+    country: 'India',
+    lat: 23.3441,
+    lon: 85.3096,
+    typicalWinterSmogPeak: 'Plateau morning cold smog',
+    defaultTelemetry: {
+      aqi: 158,
+      category: 'Poor',
+      pm25: 72,
+      pm10: 145,
+      no2: 46,
+      so2: 20,
+      co: 1.2,
+      o3: 44,
+      temperature: 20,
+      humidity: 64,
+      windSpeed: 7.0,
+      dominantPollutant: 'PM2.5',
+      source: 'offline_telemetry',
+      timestamp: new Date().toISOString(),
+    }
+  },
+  {
+    id: 'srinagar',
+    name: 'Srinagar (Jammu & Kashmir)',
+    country: 'India',
+    lat: 34.0837,
+    lon: 74.7973,
+    typicalWinterSmogPeak: 'Kashmir valley winter heating biomass smoke',
+    defaultTelemetry: {
+      aqi: 165,
+      category: 'Poor',
+      pm25: 80,
+      pm10: 140,
+      no2: 36,
+      so2: 12,
+      co: 1.5,
+      o3: 35,
+      temperature: 7,
+      humidity: 80,
       windSpeed: 4.0,
-      dominantPollutant: 'PM2.5 & PM10',
+      dominantPollutant: 'PM2.5 (Biomass soot)',
+      source: 'offline_telemetry',
+      timestamp: new Date().toISOString(),
+    }
+  },
+  {
+    id: 'goa',
+    name: 'Panaji (Goa)',
+    country: 'India',
+    lat: 15.4909,
+    lon: 73.8278,
+    typicalWinterSmogPeak: 'Clean coastal sea breezes',
+    defaultTelemetry: {
+      aqi: 52,
+      category: 'Moderate',
+      pm25: 14,
+      pm10: 36,
+      no2: 20,
+      so2: 6,
+      co: 0.5,
+      o3: 32,
+      temperature: 29,
+      humidity: 70,
+      windSpeed: 14.5,
+      dominantPollutant: 'PM2.5',
       source: 'offline_telemetry',
       timestamp: new Date().toISOString(),
     }
@@ -227,8 +762,8 @@ export function getAqiCategoryColor(category: AqiCategory): {
 }
 
 /**
- * Fetch live telemetry from Open-Meteo Air Quality & Weather API
- * Falls back safely to city defaults if network is unavailable.
+ * Fetch live atmospheric telemetry from Open-Meteo Air Quality & Weather API
+ * Falls back safely to calibrated city baseline if offline or rate-limited.
  */
 export async function fetchLiveAirQuality(city: CityPreset): Promise<PollutantTelemetry> {
   const airQualityUrl = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${city.lat}&longitude=${city.lon}&current=european_aqi,us_aqi,pm10,pm2_5,carbon_monoxide,nitrogen_dioxide,sulphur_dioxide,ozone`;
@@ -236,12 +771,12 @@ export async function fetchLiveAirQuality(city: CityPreset): Promise<PollutantTe
 
   try {
     const [aqiRes, weatherRes] = await Promise.all([
-      fetch(airQualityUrl, { signal: AbortSignal.timeout(5000) }),
-      fetch(weatherUrl, { signal: AbortSignal.timeout(5000) })
+      fetch(airQualityUrl, { signal: AbortSignal.timeout(6000) }),
+      fetch(weatherUrl, { signal: AbortSignal.timeout(6000) })
     ]);
 
     if (!aqiRes.ok || !weatherRes.ok) {
-      throw new Error(`API response status: AQI=${aqiRes.status}, Weather=${weatherRes.status}`);
+      throw new Error(`API status: AQI=${aqiRes.status}, Weather=${weatherRes.status}`);
     }
 
     const aqiData = await aqiRes.json();
@@ -250,13 +785,12 @@ export async function fetchLiveAirQuality(city: CityPreset): Promise<PollutantTe
     const currentAqi = aqiData.current || {};
     const currentWeather = weatherData.current || {};
 
-    // Open-Meteo provides US AQI or European AQI. In Indian context (CPCB), US AQI standard is most equivalent.
     const calculatedAqi = Math.round(currentAqi.us_aqi || currentAqi.european_aqi || city.defaultTelemetry.aqi);
     const pm25 = Math.round(currentAqi.pm2_5 ?? city.defaultTelemetry.pm25);
     const pm10 = Math.round(currentAqi.pm10 ?? city.defaultTelemetry.pm10);
     const no2 = Math.round(currentAqi.nitrogen_dioxide ?? city.defaultTelemetry.no2);
     const so2 = Math.round(currentAqi.sulphur_dioxide ?? city.defaultTelemetry.so2);
-    const co = Number(((currentAqi.carbon_monoxide ?? 1200) / 1000).toFixed(1)); // Convert µg/m³ to mg/m³
+    const co = Number(((currentAqi.carbon_monoxide ?? 1200) / 1000).toFixed(1));
     const o3 = Math.round(currentAqi.ozone ?? city.defaultTelemetry.o3);
 
     const temp = Math.round(currentWeather.temperature_2m ?? city.defaultTelemetry.temperature);
@@ -265,8 +799,8 @@ export async function fetchLiveAirQuality(city: CityPreset): Promise<PollutantTe
 
     let dominant = 'PM2.5';
     if (pm10 > pm25 * 2.5) dominant = 'PM10 (Coarse Dust)';
-    else if (no2 > 80) dominant = 'NO2 (Traffic Exhaust)';
-    else if (o3 > 120) dominant = 'Ozone (Photochemical Smog)';
+    else if (no2 > 75) dominant = 'NO2 (Traffic Exhaust)';
+    else if (o3 > 115) dominant = 'Ozone (Photochemical Smog)';
 
     return {
       aqi: calculatedAqi,
@@ -285,13 +819,78 @@ export async function fetchLiveAirQuality(city: CityPreset): Promise<PollutantTe
       timestamp: new Date().toISOString(),
     };
   } catch (error) {
-    console.warn(`[OpenMeteo] Live fetch failed for ${city.name}, using calibrated seasonal telemetry. Reason:`, error);
+    console.warn(`[OpenMeteo] Live fetch failed for ${city.name}, using calibrated baseline. Reason:`, error);
     return {
       ...city.defaultTelemetry,
       timestamp: new Date().toISOString(),
       source: 'offline_telemetry',
     };
   }
+}
+
+/**
+ * Live Open-Meteo Geocoding: Search ANY Indian city, town, or district by name
+ */
+export async function searchCitiesGeocoding(query: string): Promise<CityPreset[]> {
+  if (!query || query.trim().length < 2) return [];
+
+  const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query.trim())}&count=6&language=en&format=json`;
+
+  try {
+    const res = await fetch(url, { signal: AbortSignal.timeout(4000) });
+    if (!res.ok) return [];
+    const data = await res.json();
+    const results = data.results || [];
+
+    return results.map((r: any, idx: number) => {
+      const state = r.admin1 ? ` (${r.admin1})` : '';
+      return {
+        id: `custom-${r.id || idx}-${Date.now()}`,
+        name: `${r.name}${state}`,
+        country: r.country || 'India',
+        lat: r.latitude,
+        lon: r.longitude,
+        typicalWinterSmogPeak: 'Morning and evening commuter peaks',
+        defaultTelemetry: {
+          aqi: 160,
+          category: 'Poor',
+          pm25: 75,
+          pm10: 150,
+          no2: 45,
+          so2: 15,
+          co: 1.2,
+          o3: 45,
+          temperature: 24,
+          humidity: 60,
+          windSpeed: 8.0,
+          dominantPollutant: 'PM2.5',
+          source: 'offline_telemetry',
+          timestamp: new Date().toISOString(),
+        }
+      };
+    });
+  } catch (err) {
+    console.warn('[Geocoding] Search failed:', err);
+    return [];
+  }
+}
+
+/**
+ * Reverse-geocode latitude and longitude into human-readable city/district
+ */
+export async function reverseGeocodeLocation(lat: number, lon: number): Promise<string> {
+  const url = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`;
+  try {
+    const res = await fetch(url, { signal: AbortSignal.timeout(4000) });
+    if (res.ok) {
+      const data = await res.json();
+      const city = data.city || data.locality || data.principalSubdivision;
+      if (city) return city;
+    }
+  } catch (err) {
+    console.warn('[ReverseGeocode] Lookup failed:', err);
+  }
+  return `GPS (${lat.toFixed(2)}, ${lon.toFixed(2)})`;
 }
 
 /**
@@ -304,17 +903,13 @@ export function generateDiurnalForecast(baseAqi: number): HourlyForecast[] {
   for (let i = 0; i < 24; i++) {
     const hour = (currentHour + i) % 24;
     
-    // Atmospheric Boundary Layer Physics:
-    // Thermal inversion layer traps pollutants lowest during 04:00 - 08:30 (peak factor 1.35)
-    // Solar insolation causes convective mixing between 12:00 - 15:30 (minimum factor 0.65)
-    // Evening traffic + radiation cooling builds smog again between 19:00 - 22:30 (factor 1.20)
     let diurnalMultiplier = 1.0;
     if (hour >= 4 && hour <= 8) {
       diurnalMultiplier = 1.32;
     } else if (hour >= 9 && hour <= 11) {
       diurnalMultiplier = 1.05;
     } else if (hour >= 12 && hour <= 16) {
-      diurnalMultiplier = 0.68; // Best dispersion window!
+      diurnalMultiplier = 0.68;
     } else if (hour >= 17 && hour <= 18) {
       diurnalMultiplier = 0.95;
     } else if (hour >= 19 && hour <= 23) {
@@ -334,7 +929,7 @@ export function generateDiurnalForecast(baseAqi: number): HourlyForecast[] {
     if (hour >= 5 && hour <= 9) {
       recommendation = 'Smog trapped in thermal inversion. Keep windows sealed.';
     } else if (hour >= 12 && hour <= 16) {
-      recommendation = 'Solar mixing window. Best time for brief indoor air exchange.';
+      recommendation = 'Solar convective mixing window. Best time for brief indoor air exchange.';
     } else if (hour >= 18 && hour <= 21) {
       recommendation = 'Evening vehicular rush & cool air trapping pollutants. Stay indoors.';
     }

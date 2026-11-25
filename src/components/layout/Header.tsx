@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { CityPreset, PollutantTelemetry } from '../../types/aqi';
-import { INDIAN_CITIES } from '../../services/openMeteoApi';
-import { ShieldCheck, MapPin, Radio, RefreshCw, Crosshair } from 'lucide-react';
+import { INDIAN_CITIES, searchCitiesGeocoding } from '../../services/openMeteoApi';
+import { ShieldCheck, MapPin, Radio, RefreshCw, Crosshair, Search, Sparkles, X } from 'lucide-react';
 
 interface HeaderProps {
   selectedCity: CityPreset;
@@ -10,6 +10,7 @@ interface HeaderProps {
   isLoading: boolean;
   onRefresh: () => void;
   onDetectLocation: () => void;
+  isGpsActive?: boolean;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -19,12 +20,49 @@ export const Header: React.FC<HeaderProps> = ({
   isLoading,
   onRefresh,
   onDetectLocation,
+  isGpsActive = false,
 }) => {
   const isLive = telemetry.source === 'live_open_meteo';
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [geocodedResults, setGeocodedResults] = useState<CityPreset[]>([]);
+  const [isSearchingGeocode, setIsSearchingGeocode] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Filter preset cities
+  const filteredPresets = INDIAN_CITIES.filter((c) =>
+    c.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  // Trigger geocoding search for custom towns if not found in presets
+  useEffect(() => {
+    if (searchQuery.trim().length >= 3 && filteredPresets.length === 0) {
+      const timer = setTimeout(async () => {
+        setIsSearchingGeocode(true);
+        const results = await searchCitiesGeocoding(searchQuery);
+        setGeocodedResults(results);
+        setIsSearchingGeocode(false);
+      }, 350);
+      return () => clearTimeout(timer);
+    } else {
+      setGeocodedResults([]);
+      setIsSearchingGeocode(false);
+    }
+  }, [searchQuery, filteredPresets.length]);
 
   return (
-    <header className="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800">
-      {/* Skip to Main Content Link for Screen Readers (WCAG a11y) */}
+    <header className="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 shadow-xl">
       <a 
         href="#main-content" 
         className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 z-50 bg-emerald-500 text-slate-950 px-4 py-2 rounded-lg font-bold shadow-lg transition-all"
@@ -34,8 +72,8 @@ export const Header: React.FC<HeaderProps> = ({
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
         {/* Brand Logo & Title */}
-        <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 p-0.5 shadow-lg shadow-emerald-500/20 flex items-center justify-center">
+        <div className="flex items-center gap-3 shrink-0">
+          <div className="w-11 h-11 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 p-0.5 shadow-lg shadow-emerald-500/20 flex items-center justify-center">
             <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
               <ShieldCheck className="w-6 h-6 text-emerald-400" aria-hidden="true" />
             </div>
@@ -45,54 +83,139 @@ export const Header: React.FC<HeaderProps> = ({
               <span className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">
                 AeroShield
               </span>
-              <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hidden sm:inline-block">
                 Challenge 06
               </span>
             </div>
-            <p className="text-xs text-slate-400 font-medium hidden sm:block">
+            <p className="text-xs text-slate-400 font-medium hidden md:block">
               Context-Aware Urban Air Quality & Smog Mitigation Assistant
             </p>
           </div>
         </div>
 
-        {/* Location Selector & Live Telemetry Controls */}
-        <div className="flex items-center gap-2 sm:gap-3">
-          {/* City Selector */}
-          <div className="relative">
-            <label htmlFor="city-select" className="sr-only">Select Urban Location</label>
-            <div className="flex items-center bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 rounded-xl px-3 py-2 text-sm text-slate-200 transition-colors shadow-inner">
-              <MapPin className="w-4 h-4 text-emerald-400 mr-2 shrink-0" aria-hidden="true" />
-              <select
-                id="city-select"
-                aria-label="Select City"
-                value={selectedCity.id}
-                onChange={(e) => {
-                  const city = INDIAN_CITIES.find(c => c.id === e.target.value);
-                  if (city) onSelectCity(city);
+        {/* Search Bar & City Selector */}
+        <div className="flex-1 max-w-md relative" ref={dropdownRef}>
+          <div className="relative flex items-center">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3 pointer-events-none" aria-hidden="true" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setIsDropdownOpen(true);
+              }}
+              onFocus={() => setIsDropdownOpen(true)}
+              placeholder={selectedCity.name ? `Search 35+ cities (Active: ${selectedCity.name})` : "Search any city or district in India..."}
+              className="w-full bg-slate-950/80 border border-slate-700/80 focus:border-emerald-500 rounded-xl pl-9 pr-8 py-2 text-xs text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-emerald-500 transition-all shadow-inner"
+              aria-label="Search cities or districts in India"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => {
+                  setSearchQuery('');
+                  setGeocodedResults([]);
                 }}
-                className="bg-transparent border-none text-slate-100 font-medium focus:ring-0 focus:outline-none cursor-pointer pr-4"
+                className="absolute right-2.5 text-slate-400 hover:text-slate-200"
+                aria-label="Clear search"
               >
-                {INDIAN_CITIES.map((c) => (
-                  <option key={c.id} value={c.id} className="bg-slate-900 text-slate-200">
-                    {c.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
           </div>
 
+          {/* Autocomplete Dropdown */}
+          {isDropdownOpen && (
+            <div className="absolute top-full left-0 right-0 mt-2 bg-slate-900 border border-slate-800 rounded-xl shadow-2xl overflow-hidden max-h-80 overflow-y-auto z-50 scrollbar-thin">
+              {/* Presets List */}
+              {filteredPresets.length > 0 && (
+                <div>
+                  <div className="px-3 py-1.5 bg-slate-950/80 text-[10px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-800">
+                    Preset Urban Hotspots ({filteredPresets.length})
+                  </div>
+                  {filteredPresets.map((c) => (
+                    <button
+                      key={c.id}
+                      onClick={() => {
+                        onSelectCity(c);
+                        setIsDropdownOpen(false);
+                        setSearchQuery('');
+                      }}
+                      className={`w-full text-left px-3 py-2 text-xs flex items-center justify-between hover:bg-slate-800/80 transition-colors ${
+                        c.id === selectedCity.id ? 'bg-emerald-950/40 text-emerald-300 font-bold' : 'text-slate-200'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <MapPin className="w-3.5 h-3.5 text-emerald-400 shrink-0" aria-hidden="true" />
+                        <span>{c.name}</span>
+                      </div>
+                      <span className="text-[10px] text-slate-400">{c.defaultTelemetry.category}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* Geocoding Results */}
+              {isSearchingGeocode && (
+                <div className="p-3 text-xs text-slate-400 text-center flex items-center justify-center gap-2">
+                  <Sparkles className="w-3.5 h-3.5 text-emerald-400 animate-spin" />
+                  <span>Searching national coordinates...</span>
+                </div>
+              )}
+
+              {geocodedResults.length > 0 && (
+                <div>
+                  <div className="px-3 py-1.5 bg-slate-950/80 text-[10px] font-bold uppercase tracking-wider text-teal-400 border-b border-slate-800">
+                    Live Geocoded Coordinates ({geocodedResults.length})
+                  </div>
+                  {geocodedResults.map((c, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => {
+                        onSelectCity(c);
+                        setIsDropdownOpen(false);
+                        setSearchQuery('');
+                      }}
+                      className="w-full text-left px-3 py-2 text-xs flex items-center justify-between hover:bg-slate-800/80 transition-colors text-slate-200"
+                    >
+                      <div className="flex items-center gap-2">
+                        <MapPin className="w-3.5 h-3.5 text-teal-400 shrink-0" aria-hidden="true" />
+                        <span>{c.name}</span>
+                      </div>
+                      <span className="text-[10px] text-slate-400">{c.lat.toFixed(2)}, {c.lon.toFixed(2)}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {filteredPresets.length === 0 && geocodedResults.length === 0 && !isSearchingGeocode && (
+                <div className="p-4 text-xs text-slate-400 text-center">
+                  No cities found matching "{searchQuery}". Type 3+ characters to search coordinates.
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* GPS Auto-Detect & Telemetry Status */}
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           {/* GPS Auto-Detect Button */}
           <button
             onClick={onDetectLocation}
-            title="Detect My City via GPS"
-            aria-label="Auto detect my city location via browser geolocation"
-            className="p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 border border-slate-700/80 text-slate-300 hover:text-emerald-400 transition-colors"
+            disabled={isLoading}
+            title="Detect My Real-Time GPS Location"
+            aria-label="Auto detect my real-time GPS location"
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all border shadow-sm ${
+              isGpsActive
+                ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40 ring-1 ring-emerald-500/50'
+                : 'bg-slate-800/80 hover:bg-slate-700 border-slate-700/80 text-slate-200 hover:text-emerald-400'
+            }`}
           >
-            <Crosshair className="w-4 h-4" aria-hidden="true" />
+            <Crosshair className={`w-4 h-4 text-emerald-400 ${isGpsActive ? 'animate-spin' : ''}`} aria-hidden="true" />
+            <span className="hidden sm:inline">GPS Auto-Detect</span>
           </button>
 
-          {/* Refresh / Telemetry Status Badge */}
-          <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-800/60 border border-slate-700/60 text-xs">
+          {/* Refresh / Telemetry Badge */}
+          <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-800/60 border border-slate-700/60 text-xs">
             <Radio className={`w-3.5 h-3.5 ${isLive ? 'text-emerald-400 animate-pulse' : 'text-amber-400'}`} aria-hidden="true" />
             <span className="font-semibold text-slate-300">
               {isLive ? 'Live Open-Meteo' : 'Calibrated Cache'}
