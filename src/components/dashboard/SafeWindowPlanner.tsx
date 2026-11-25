@@ -19,89 +19,113 @@ export const SafeWindowPlanner: React.FC<SafeWindowPlannerProps> = ({
 
   const safeWindow = calculateSafeActivityWindows(forecasts, persona, activityType);
 
+  const activities = [
+    { id: 'morning_walk', label: 'Morning Walk' },
+    { id: 'school_commute', label: 'School Run' },
+    { id: 'outdoor_workout', label: 'Workout / Run' },
+    { id: 'grocery_run', label: 'Grocery Errands' },
+    { id: 'general', label: 'General Routine' },
+  ] as const;
+
   return (
     <section 
       aria-labelledby="activity-planner-heading"
-      className="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 backdrop-blur-md shadow-lg"
+      className="glass-card rounded-3xl p-6 sm:p-8 shadow-xl flex flex-col justify-between"
     >
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
-        <div className="flex items-center gap-2">
-          <Calendar className="w-5 h-5 text-teal-400" aria-hidden="true" />
-          <h2 id="activity-planner-heading" className="text-lg font-bold text-white">
-            Safe Activity Window & Diurnal Smog Planner
-          </h2>
-        </div>
-
-        {/* Activity Selector Dropdown */}
-        <div className="flex items-center gap-2">
-          <label htmlFor="activity-select" className="text-xs text-slate-400 font-medium">Activity:</label>
-          <select
-            id="activity-select"
-            aria-label="Select Daily Activity"
-            value={activityType}
-            onChange={(e) => setActivityType(e.target.value as any)}
-            className="bg-slate-800 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-slate-100 font-medium focus:ring-1 focus:ring-emerald-500 focus:outline-none cursor-pointer"
-          >
-            <option value="morning_walk">Morning Walk / Jog</option>
-            <option value="school_commute">School Commute & Drop-off</option>
-            <option value="outdoor_workout">Outdoor Workout / Cycling</option>
-            <option value="grocery_run">Grocery & Errands</option>
-            <option value="general">General Daily Routine</option>
-          </select>
-        </div>
-      </div>
-
-      {/* Hero Window Recommendation Box */}
-      <div className="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 p-5 rounded-xl border border-teal-500/30 mb-5 relative overflow-hidden">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <span className="text-[11px] font-bold uppercase tracking-wider text-teal-400 flex items-center gap-1.5 mb-1">
-              <Sun className="w-4 h-4 text-amber-400" aria-hidden="true" />
-              Calculated Optimal Outdoor Window Today
-            </span>
-            <div className="text-2xl sm:text-3xl font-black text-white flex items-center gap-2">
-              <Clock className="w-6 h-6 text-emerald-400" aria-hidden="true" />
-              {safeWindow.bestWindow}
-            </div>
-            <p className="text-xs text-slate-300 mt-2 max-w-2xl leading-relaxed">
-              {safeWindow.rationale}
-            </p>
-          </div>
-
-          <div className="shrink-0">
-            <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold ${
-              safeWindow.safeForCurrentPersona 
-                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' 
-                : 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
-            }`}>
-              {safeWindow.safeForCurrentPersona ? (
-                <>
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400" aria-hidden="true" />
-                  Acceptable for {persona.title.split(' ')[0]}
-                </>
-              ) : (
-                <>
-                  <XCircle className="w-4 h-4 text-rose-400" aria-hidden="true" />
-                  Caution: Inhalation Exceeds Limits
-                </>
-              )}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* 24-Hour Diurnal Forecast Timeline */}
       <div>
-        <div className="flex items-center justify-between text-xs text-slate-400 mb-2">
-          <span className="font-semibold text-slate-300">Hourly Atmospheric Smog Curve (24h Forecast):</span>
-          <span>Scroll horizontally →</span>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+          <div className="flex items-center gap-2.5">
+            <div className="w-10 h-10 rounded-xl bg-teal-500/15 border border-teal-500/30 flex items-center justify-center text-teal-400">
+              <Calendar className="w-5 h-5" aria-hidden="true" />
+            </div>
+            <div>
+              <h2 id="activity-planner-heading" className="text-lg font-bold text-white">
+                Daily Smog Routine & Safe Window Planner
+              </h2>
+              <span className="text-xs text-slate-400">
+                Atmospheric boundary layer solar mixing model
+              </span>
+            </div>
+          </div>
+
+          <span className="text-xs font-bold px-3 py-1 rounded-full bg-teal-500/15 text-teal-300 border border-teal-500/30 self-start sm:self-auto">
+            Diurnal Forecasting
+          </span>
+        </div>
+
+        {/* Activity Segmented Pills Switcher */}
+        <div className="flex flex-wrap gap-1.5 p-1.5 bg-slate-950/70 rounded-2xl border border-white/5 mb-6">
+          {activities.map((a) => (
+            <button
+              key={a.id}
+              onClick={() => setActivityType(a.id)}
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                activityType === a.id
+                  ? 'bg-emerald-500 text-slate-950 shadow-glow-emerald'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+              }`}
+            >
+              {a.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Hero Calculated Window Banner */}
+        <div className="bg-gradient-to-br from-slate-950 via-slate-900 to-teal-950/40 p-6 rounded-2xl border border-teal-500/30 mb-6 relative overflow-hidden shadow-lg">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <span className="text-[10px] font-extrabold uppercase tracking-widest text-teal-400 flex items-center gap-1.5 mb-1.5">
+                <Sun className="w-4 h-4 text-amber-400 animate-spin-slow" aria-hidden="true" />
+                Calculated Optimal Outdoor Window Today
+              </span>
+
+              <div className="text-3xl sm:text-4xl font-black text-white flex items-center gap-2.5">
+                <Clock className="w-7 h-7 text-emerald-400" aria-hidden="true" />
+                {safeWindow.bestWindow}
+              </div>
+
+              <p className="text-xs text-slate-300 mt-2.5 max-w-xl leading-relaxed">
+                {safeWindow.rationale}
+              </p>
+            </div>
+
+            <div className="shrink-0 self-start sm:self-auto">
+              <span className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-extrabold ${
+                safeWindow.safeForCurrentPersona 
+                  ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-glow-emerald' 
+                  : 'bg-rose-500/20 text-rose-300 border border-rose-500/40 shadow-glow-rose'
+              }`}>
+                {safeWindow.safeForCurrentPersona ? (
+                  <>
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400" aria-hidden="true" />
+                    Acceptable for {persona.title.split(' ')[0]}
+                  </>
+                ) : (
+                  <>
+                    <XCircle className="w-4 h-4 text-rose-400" aria-hidden="true" />
+                    Caution: Inhalation Exceeds Limits
+                  </>
+                )}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 24-Hour Diurnal Timeline */}
+      <div>
+        <div className="flex items-center justify-between text-xs text-slate-400 mb-3">
+          <span className="font-extrabold uppercase tracking-wider text-slate-300">
+            24-Hour Atmospheric Smog Curve:
+          </span>
+          <span className="text-[11px] text-slate-500">Scroll horizontally →</span>
         </div>
 
         <div 
           tabIndex={0}
           role="region"
-          aria-label="Hourly air quality forecast scrollable timeline"
-          className="flex gap-2 overflow-x-auto pb-3 pt-1 scrollbar-thin"
+          aria-label="24-hour diurnal air quality forecast scrollable timeline"
+          className="flex gap-2.5 overflow-x-auto pb-3 pt-1 scrollbar-thin"
         >
           {forecasts.map((f, i) => {
             const colors = getAqiCategoryColor(f.category);
@@ -110,34 +134,34 @@ export const SafeWindowPlanner: React.FC<SafeWindowPlannerProps> = ({
             return (
               <div
                 key={i}
-                className={`flex flex-col items-center justify-between p-3 rounded-xl border shrink-0 w-24 transition-all ${
+                className={`flex flex-col items-center justify-between p-3.5 rounded-2xl border shrink-0 w-24 transition-all ${
                   isWindowHour 
-                    ? 'bg-teal-950/40 border-teal-400/80 shadow-md ring-1 ring-teal-400/50' 
-                    : 'bg-slate-950/60 border-slate-800/80'
+                    ? 'bg-teal-950/60 border-teal-400 shadow-glow-cyan ring-1 ring-teal-400/50' 
+                    : 'bg-slate-950/60 border-white/5'
                 }`}
               >
                 <span className="text-xs font-bold text-slate-300">{f.time}</span>
                 
                 <div 
-                  className={`my-2 text-sm font-black px-2 py-0.5 rounded-md ${colors.bg} ${colors.text}`}
+                  className={`my-2.5 text-sm font-black px-2.5 py-1 rounded-lg ${colors.bg} ${colors.text} border ${colors.border}`}
                   title={`${f.category}: AQI ${f.aqi}`}
                 >
                   {f.aqi}
                 </div>
 
-                <div className="text-[10px] text-slate-400 font-medium">
+                <div className="text-[11px] text-slate-400 font-mono">
                   {f.pm25} µg
                 </div>
 
-                <div className="mt-2 text-[10px] text-center font-semibold">
+                <div className="mt-2 text-[10px] text-center font-bold">
                   {f.hour >= 12 && f.hour <= 16 ? (
-                    <span className="text-emerald-400 flex items-center gap-0.5">
-                      <Sparkles className="w-3 h-3" aria-hidden="true" /> Solar Mix
+                    <span className="text-emerald-400 flex items-center justify-center gap-0.5">
+                      <Sparkles className="w-3 h-3" /> Solar
                     </span>
                   ) : f.hour >= 5 && f.hour <= 9 ? (
                     <span className="text-rose-400">Inversion</span>
                   ) : (
-                    <span className="text-slate-500">Normal</span>
+                    <span className="text-slate-500">Trapped</span>
                   )}
                 </div>
               </div>

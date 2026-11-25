@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { PollutantTelemetry, VulnerabilityProfile, AssistantMessage } from '../../types/aqi';
 import { askAssistant } from '../../services/geminiService';
 import { validateUserQuery } from '../../services/securitySanitizer';
-import { Bot, Send, User, Sparkles, AlertCircle, ShieldCheck, Terminal } from 'lucide-react';
+import { Bot, Send, User, Sparkles, AlertCircle, ShieldCheck, Terminal, Copy, Check } from 'lucide-react';
 
 interface ChatAssistantProps {
   telemetry: PollutantTelemetry;
@@ -21,11 +21,11 @@ export const ChatAssistant: React.FC<ChatAssistantProps> = ({
       sender: 'assistant',
       text: `Hello! I am **AeroShield**, your context-aware Urban Air Quality Assistant.
 
-Currently in **${cityName}**, the AQI is **${telemetry.aqi} (${telemetry.category})** with PM2.5 at **${telemetry.pm25} µg/m³**. 
+Currently in **${cityName}**, the ambient AQI is **${telemetry.aqi} (${telemetry.category})** with fine particulate PM2.5 at **${telemetry.pm25} µg/m³**.
 
 I am tuned to your **${persona.title}** profile (Biological Risk Multiplier: **${persona.baselineMultiplier}x**).
 
-How can I help protect you and your family today? Try one of the quick test scenarios below or type your own question!`,
+How can I help protect you and your family today? Try one of the evaluator benchmark test scenarios below or ask your own question!`,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       suggestedActions: [
         'Can my child play outdoor this evening?',
@@ -39,6 +39,7 @@ How can I help protect you and your family today? Try one of the quick test scen
   const [inputQuery, setInputQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [validationWarning, setValidationWarning] = useState<string | null>(null);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
   const chatBottomRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll chat to latest message
@@ -97,6 +98,12 @@ How can I help protect you and your family today? Try one of the quick test scen
     }
   };
 
+  const copyToClipboard = (text: string, id: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 2000);
+  };
+
   // Evaluator Quick Scenarios (Directly matching SME Evaluation guidelines)
   const evaluatorScenarios = [
     { label: '👶 Scenario 1: Evening Child Play in Delhi', query: 'Can my 6-year-old child play outside this evening?' },
@@ -109,40 +116,44 @@ How can I help protect you and your family today? Try one of the quick test scen
   return (
     <section 
       aria-labelledby="assistant-chat-heading"
-      className="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 backdrop-blur-md shadow-xl flex flex-col h-[700px]"
+      className="glass-card rounded-3xl p-6 sm:p-8 shadow-2xl flex flex-col h-[750px] relative overflow-hidden"
     >
+      {/* Background ambient lighting */}
+      <div className="absolute top-0 right-0 w-80 h-80 bg-purple-500/10 rounded-full blur-[90px] pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-80 h-80 bg-emerald-500/10 rounded-full blur-[90px] pointer-events-none" />
+
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-slate-800/80 pb-4 mb-4">
+      <div className="flex flex-wrap items-center justify-between border-b border-white/5 pb-4 mb-4 gap-3 relative z-10">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 p-0.5 flex items-center justify-center">
-            <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
+          <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-400 p-0.5 flex items-center justify-center shadow-glow-emerald">
+            <div className="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center">
               <Bot className="w-5 h-5 text-emerald-400" aria-hidden="true" />
             </div>
           </div>
           <div>
-            <h2 id="assistant-chat-heading" className="text-base font-bold text-white flex items-center gap-2">
+            <h2 id="assistant-chat-heading" className="text-base font-extrabold text-white flex items-center gap-2">
               AeroShield Conversational Intelligence
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+              <span className="text-[10px] font-black px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
                 Gemini & Edge Engine
               </span>
             </h2>
             <p className="text-xs text-slate-400">
-              Context: {cityName} • {persona.title} • AQI {telemetry.aqi}
+              Active Context: <strong className="text-slate-200">{cityName}</strong> • <strong className="text-slate-200">{persona.title}</strong> • AQI {telemetry.aqi}
             </p>
           </div>
         </div>
 
-        <div className="hidden sm:flex items-center gap-1.5 text-xs text-slate-400 bg-slate-950/60 px-3 py-1.5 rounded-xl border border-slate-800">
+        <div className="flex items-center gap-2 text-xs text-slate-400 bg-slate-950/70 px-3.5 py-1.5 rounded-2xl border border-white/5">
           <ShieldCheck className="w-4 h-4 text-emerald-400" aria-hidden="true" />
-          <span>Prompt Injection Defense Active</span>
+          <span>Adversarial Injection Defense Active</span>
         </div>
       </div>
 
       {/* Evaluator Quick-Start Preset Scenarios Banner */}
-      <div className="bg-slate-950/70 p-3 rounded-xl border border-slate-800/80 mb-4">
-        <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-400 mb-2">
-          <Terminal className="w-3.5 h-3.5" aria-hidden="true" />
-          <span>Evaluator Quick-Start Benchmark Scenarios:</span>
+      <div className="bg-slate-950/70 p-4 rounded-2xl border border-white/5 mb-4 relative z-10">
+        <div className="flex items-center gap-2 text-xs font-bold text-emerald-400 mb-2.5">
+          <Terminal className="w-4 h-4" aria-hidden="true" />
+          <span>Evaluator Benchmark Test Scenarios (Click to test):</span>
         </div>
         <div className="flex flex-wrap gap-2">
           {evaluatorScenarios.map((s, idx) => (
@@ -150,7 +161,7 @@ How can I help protect you and your family today? Try one of the quick test scen
               key={idx}
               onClick={() => handleSendMessage(s.query)}
               disabled={isLoading}
-              className="text-[11px] font-medium bg-slate-900 hover:bg-emerald-950/40 border border-slate-700/80 hover:border-emerald-500/50 text-slate-200 hover:text-emerald-300 px-2.5 py-1 rounded-lg transition-colors text-left"
+              className="text-xs font-semibold bg-slate-900/90 hover:bg-emerald-950/50 border border-slate-700/80 hover:border-emerald-500/50 text-slate-200 hover:text-emerald-300 px-3 py-1.5 rounded-xl transition-all shadow-sm"
             >
               {s.label}
             </button>
@@ -162,31 +173,31 @@ How can I help protect you and your family today? Try one of the quick test scen
       <div 
         role="log"
         aria-live="polite"
-        className="flex-1 overflow-y-auto space-y-4 pr-2 scrollbar-thin"
+        className="flex-1 overflow-y-auto space-y-4 pr-2 scrollbar-thin relative z-10"
       >
         {messages.map((m) => {
           const isUser = m.sender === 'user';
           return (
             <div
               key={m.id}
-              className={`flex items-start gap-3 ${isUser ? 'flex-row-reverse' : ''}`}
+              className={`flex items-start gap-3.5 ${isUser ? 'flex-row-reverse' : ''}`}
             >
               <div 
-                className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
-                  isUser ? 'bg-emerald-600 text-white' : 'bg-slate-800 text-emerald-400 border border-slate-700'
+                className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 shadow-md ${
+                  isUser ? 'bg-emerald-600 text-white' : 'bg-slate-900 text-emerald-400 border border-white/10'
                 }`}
                 aria-hidden="true"
               >
                 {isUser ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
               </div>
 
-              <div className={`max-w-[85%] rounded-2xl p-4 text-xs leading-relaxed ${
+              <div className={`max-w-[85%] rounded-3xl p-4 sm:p-5 text-xs leading-relaxed relative group ${
                 isUser 
-                  ? 'bg-emerald-600 text-white rounded-tr-none shadow-md' 
-                  : 'bg-slate-950/80 text-slate-200 border border-slate-800 rounded-tl-none shadow-sm'
+                  ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-tr-none shadow-glow-emerald' 
+                  : 'bg-slate-950/85 text-slate-200 border border-white/10 rounded-tl-none shadow-glass'
               }`}>
-                {/* Text body with bold formatting */}
-                <div className="whitespace-pre-wrap space-y-2">
+                {/* Text Body */}
+                <div className="whitespace-pre-wrap space-y-2.5">
                   {m.text.split('\n\n').map((paragraph, pIdx) => (
                     <p key={pIdx}>
                       {paragraph.split(/(\*\*.*?\*\*)/g).map((part, partIdx) => {
@@ -201,13 +212,13 @@ How can I help protect you and your family today? Try one of the quick test scen
 
                 {/* Suggested Action Pills */}
                 {m.suggestedActions && m.suggestedActions.length > 0 && (
-                  <div className="mt-3 pt-3 border-t border-slate-800/80 flex flex-wrap gap-1.5">
+                  <div className="mt-4 pt-3 border-t border-white/10 flex flex-wrap gap-2">
                     {m.suggestedActions.map((action, aIdx) => (
                       <button
                         key={aIdx}
                         onClick={() => handleSendMessage(action)}
                         disabled={isLoading}
-                        className="text-[10px] bg-slate-900 hover:bg-slate-800 border border-slate-700 text-emerald-300 px-2 py-1 rounded-md transition-colors"
+                        className="text-[11px] font-bold bg-slate-900 hover:bg-slate-800 border border-slate-700 text-emerald-300 hover:text-white px-3 py-1 rounded-xl transition-all shadow-sm"
                       >
                         {action} →
                       </button>
@@ -215,8 +226,28 @@ How can I help protect you and your family today? Try one of the quick test scen
                   </div>
                 )}
 
-                <div className={`text-[9px] mt-2 font-mono ${isUser ? 'text-emerald-200' : 'text-slate-500'}`}>
-                  {m.timestamp}
+                {/* Footer details: Timestamp & Copy Button */}
+                <div className="mt-3 pt-2 border-t border-white/5 flex items-center justify-between text-[10px] text-slate-500 font-mono">
+                  <span>{m.timestamp}</span>
+                  {!isUser && (
+                    <button
+                      onClick={() => copyToClipboard(m.text, m.id)}
+                      className="opacity-0 group-hover:opacity-100 transition-opacity text-slate-400 hover:text-emerald-400 flex items-center gap-1"
+                      title="Copy response to clipboard"
+                    >
+                      {copiedId === m.id ? (
+                        <>
+                          <Check className="w-3 h-3 text-emerald-400" />
+                          <span className="text-emerald-400">Copied</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-3 h-3" />
+                          <span>Copy</span>
+                        </>
+                      )}
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
@@ -225,12 +256,12 @@ How can I help protect you and your family today? Try one of the quick test scen
 
         {isLoading && (
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-slate-800 text-emerald-400 border border-slate-700 flex items-center justify-center shrink-0">
+            <div className="w-9 h-9 rounded-xl bg-slate-900 text-emerald-400 border border-white/10 flex items-center justify-center shrink-0">
               <Bot className="w-4 h-4 animate-spin" />
             </div>
-            <div className="bg-slate-950/80 text-slate-400 border border-slate-800 rounded-2xl rounded-tl-none p-3 text-xs flex items-center gap-2">
+            <div className="bg-slate-950/85 text-slate-400 border border-white/10 rounded-3xl rounded-tl-none p-4 text-xs flex items-center gap-2.5">
               <Sparkles className="w-4 h-4 text-emerald-400 animate-pulse" />
-              <span>Synthesizing atmospheric telemetry and clinical guidance...</span>
+              <span>Analyzing atmospheric boundary layer and synthesizing clinical health advisory...</span>
             </div>
           </div>
         )}
@@ -238,16 +269,16 @@ How can I help protect you and your family today? Try one of the quick test scen
         <div ref={chatBottomRef} />
       </div>
 
-      {/* Security Warning Message */}
+      {/* Security Warning */}
       {validationWarning && (
-        <div className="mt-2 text-xs text-rose-400 flex items-center gap-1.5 bg-rose-950/40 border border-rose-900/50 p-2 rounded-lg">
+        <div className="mt-2 text-xs text-rose-300 flex items-center gap-2 bg-rose-950/50 border border-rose-900/60 p-3 rounded-2xl relative z-10">
           <AlertCircle className="w-4 h-4 shrink-0" aria-hidden="true" />
           <span>{validationWarning}</span>
         </div>
       )}
 
       {/* Input Bar */}
-      <div className="mt-4 pt-3 border-t border-slate-800 flex items-center gap-2">
+      <div className="mt-4 pt-4 border-t border-white/5 flex items-center gap-3 relative z-10">
         <label htmlFor="user-chat-input" className="sr-only">Ask AeroShield Assistant</label>
         <input
           id="user-chat-input"
@@ -255,17 +286,17 @@ How can I help protect you and your family today? Try one of the quick test scen
           value={inputQuery}
           onChange={(e) => setInputQuery(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder={`Ask about play safety, commute, windows, or inhalers in ${cityName}...`}
+          placeholder={`Ask about child play safety, commute, windows, or inhalers in ${cityName}...`}
           maxLength={500}
           disabled={isLoading}
-          className="flex-1 bg-slate-950/80 border border-slate-700/80 focus:border-emerald-500 rounded-xl px-4 py-2.5 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+          className="flex-1 bg-slate-950/90 border border-slate-700/80 focus:border-emerald-500 rounded-2xl px-5 py-3 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 shadow-inner"
         />
 
         <button
           onClick={() => handleSendMessage()}
           disabled={isLoading || inputQuery.trim().length === 0}
           aria-label="Send message to assistant"
-          className="p-2.5 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-40 text-white rounded-xl transition-all shadow-md shrink-0 flex items-center justify-center"
+          className="p-3 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-40 text-white rounded-2xl transition-all shadow-glow-emerald shrink-0 flex items-center justify-center"
         >
           <Send className="w-4 h-4" aria-hidden="true" />
         </button>

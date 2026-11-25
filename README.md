@@ -163,7 +163,7 @@ npm install
 
 ### 3. Run Automated Tests
 ```bash
-# Execute the full 24-test validation suite
+# Execute the full 30-test validation suite
 npm test
 ```
 
