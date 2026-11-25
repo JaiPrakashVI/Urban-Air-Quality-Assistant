@@ -154,8 +154,8 @@ To help evaluators review the application quickly (as requested in the SME brief
 ### 2. Installation
 ```bash
 # Clone the public repository
-git clone <your-repo-link>
-cd AQI
+git clone https://github.com/JaiPrakashVI/Urban-Air-Quality-Assistant.git
+cd Urban-Air-Quality-Assistant
 
 # Install dependencies
 npm install
