@@ -58,41 +58,41 @@ export const AqiHeroCard: React.FC<AqiHeroCardProps> = ({
       />
 
       {/* Top Header Row */}
-      <div className="flex flex-wrap items-center justify-between gap-3 mb-6 relative z-10 border-b border-white/5 pb-4">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-6 relative z-10 border-b border-slate-200 dark:border-white/5 pb-4">
         <div className="flex items-center gap-2">
           {isGpsLocated ? (
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shadow-glow-emerald">
-              <Navigation className="w-3.5 h-3.5 animate-pulse text-emerald-400" aria-hidden="true" />
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30">
+              <Navigation className="w-3.5 h-3.5 animate-pulse text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
               Hyperlocal GPS Telemetry
             </span>
           ) : (
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-slate-800/80 text-slate-300 border border-slate-700/60">
-              <Activity className="w-3.5 h-3.5 text-emerald-400" aria-hidden="true" />
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700/60">
+              <Activity className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
               Live Telemetry Monitor
             </span>
           )}
-          <span className="text-slate-600 hidden sm:inline">•</span>
-          <span className="text-xs text-slate-400 flex items-center gap-1">
-            <Clock className="w-3 h-3 text-slate-500" aria-hidden="true" />
+          <span className="text-slate-300 dark:text-slate-600 hidden sm:inline">•</span>
+          <span className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1">
+            <Clock className="w-3 h-3 text-slate-400 dark:text-slate-500" aria-hidden="true" />
             Synchronized at {formattedTime}
           </span>
         </div>
 
         {/* Weather Strip */}
-        <div className="flex items-center gap-4 bg-slate-950/70 px-4 py-1.5 rounded-2xl border border-white/5 text-xs">
-          <div className="flex items-center gap-1.5 text-slate-300">
-            <Thermometer className="w-4 h-4 text-amber-400" aria-hidden="true" />
-            <span className="font-bold text-white">{telemetry.temperature}°C</span>
+        <div className="flex items-center gap-4 bg-slate-100/90 dark:bg-slate-950/70 px-4 py-1.5 rounded-2xl border border-slate-200 dark:border-white/5 text-xs">
+          <div className="flex items-center gap-1.5 text-slate-600 dark:text-slate-300">
+            <Thermometer className="w-4 h-4 text-amber-500 dark:text-amber-400" aria-hidden="true" />
+            <span className="font-bold text-slate-900 dark:text-white">{telemetry.temperature}°C</span>
           </div>
-          <span className="text-slate-700">|</span>
-          <div className="flex items-center gap-1.5 text-slate-300">
-            <Droplets className="w-4 h-4 text-cyan-400" aria-hidden="true" />
-            <span className="font-bold text-white">{telemetry.humidity}%</span>
+          <span className="text-slate-300 dark:text-slate-700">|</span>
+          <div className="flex items-center gap-1.5 text-slate-600 dark:text-slate-300">
+            <Droplets className="w-4 h-4 text-cyan-500 dark:text-cyan-400" aria-hidden="true" />
+            <span className="font-bold text-slate-900 dark:text-white">{telemetry.humidity}%</span>
           </div>
-          <span className="text-slate-700">|</span>
-          <div className="flex items-center gap-1.5 text-slate-300">
-            <Wind className="w-4 h-4 text-teal-400" aria-hidden="true" />
-            <span className="font-bold text-white">{telemetry.windSpeed} km/h</span>
+          <span className="text-slate-300 dark:text-slate-700">|</span>
+          <div className="flex items-center gap-1.5 text-slate-600 dark:text-slate-300">
+            <Wind className="w-4 h-4 text-teal-500 dark:text-teal-400" aria-hidden="true" />
+            <span className="font-bold text-slate-900 dark:text-white">{telemetry.windSpeed} km/h</span>
           </div>
         </div>
       </div>
@@ -100,8 +100,8 @@ export const AqiHeroCard: React.FC<AqiHeroCardProps> = ({
       {/* Main Gauge & Overview Section */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
         
-        {/* Left: Radial SVG Arc Speedometer Gauge (4 cols) */}
-        <div className="lg:col-span-5 flex flex-col items-center justify-center p-4 bg-slate-950/60 rounded-2xl border border-white/5 relative">
+        {/* Left: Radial SVG Arc Speedometer Gauge (5 cols) */}
+        <div className="lg:col-span-5 flex flex-col items-center justify-center p-4 bg-slate-50/80 dark:bg-slate-950/60 rounded-2xl border border-slate-200 dark:border-white/5 relative">
           <div className="relative w-56 h-36 flex items-center justify-center overflow-hidden">
             {/* SVG Speedometer Gauge */}
             <svg viewBox="0 0 200 110" className="w-full h-full">
@@ -120,7 +120,8 @@ export const AqiHeroCard: React.FC<AqiHeroCardProps> = ({
               <path
                 d="M 20 100 A 80 80 0 0 1 180 100"
                 fill="none"
-                stroke="rgba(255, 255, 255, 0.08)"
+                stroke="#E2E8F0"
+                className="dark:stroke-slate-800"
                 strokeWidth="14"
                 strokeLinecap="round"
               />
@@ -141,13 +142,13 @@ export const AqiHeroCard: React.FC<AqiHeroCardProps> = ({
                   y1="100"
                   x2="100"
                   y2="28"
-                  stroke="#FFFFFF"
+                  stroke="#0F172A"
+                  className="dark:stroke-white transition-all duration-700 ease-out"
                   strokeWidth="3.5"
                   strokeLinecap="round"
-                  className="transition-all duration-700 ease-out"
                 />
-                <circle cx="100" cy="100" r="7" fill="#FFFFFF" />
-                <circle cx="100" cy="100" r="3" fill="#0F172A" />
+                <circle cx="100" cy="100" r="7" fill="#0F172A" className="dark:fill-white" />
+                <circle cx="100" cy="100" r="3" fill="#10B981" />
               </g>
             </svg>
           </div>
@@ -155,15 +156,15 @@ export const AqiHeroCard: React.FC<AqiHeroCardProps> = ({
           {/* Central Score Callout */}
           <div className="text-center mt-[-8px]">
             <div className="flex items-baseline justify-center gap-1.5">
-              <span className="text-5xl sm:text-6xl font-black text-white tracking-tight" aria-label={`AQI: ${telemetry.aqi}`}>
+              <span className="text-5xl sm:text-6xl font-black text-slate-900 dark:text-white tracking-tight" aria-label={`AQI: ${telemetry.aqi}`}>
                 {telemetry.aqi}
               </span>
-              <span className="text-xs uppercase font-extrabold tracking-wider text-slate-400">AQI</span>
+              <span className="text-xs uppercase font-extrabold tracking-wider text-slate-500 dark:text-slate-400">AQI</span>
             </div>
             
             <div className="mt-1">
               <span 
-                className={`inline-block text-xs uppercase font-extrabold px-3 py-1 rounded-full border shadow-sm ${categoryColor.bg} ${categoryColor.text} ${categoryColor.border}`}
+                className={`inline-block text-xs uppercase font-extrabold px-3 py-1 rounded-full border shadow-xs ${categoryColor.bg} ${categoryColor.text} ${categoryColor.border}`}
               >
                 {telemetry.category}
               </span>
@@ -174,19 +175,19 @@ export const AqiHeroCard: React.FC<AqiHeroCardProps> = ({
         {/* Center / Right: City Details & Health Alert (7 cols) */}
         <div className="lg:col-span-7 flex flex-col justify-center space-y-4">
           <div>
-            <span className="text-[11px] font-bold uppercase tracking-widest text-emerald-400 block mb-1">
+            <span className="text-[11px] font-bold uppercase tracking-widest text-emerald-600 dark:text-emerald-400 block mb-1">
               Atmospheric Diagnostic
             </span>
-            <h1 id="aqi-hero-heading" className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+            <h1 id="aqi-hero-heading" className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
               {cityName}
             </h1>
-            <p className="text-sm text-slate-300 mt-2 leading-relaxed">
+            <p className="text-sm text-slate-600 dark:text-slate-300 mt-2 leading-relaxed">
               Primary Air Contaminant:{' '}
-              <strong className="text-emerald-300 underline decoration-emerald-500/40 underline-offset-4">
+              <strong className="text-emerald-700 dark:text-emerald-300 underline decoration-emerald-500/40 underline-offset-4">
                 {telemetry.dominantPollutant}
               </strong>. 
               Ambient fine particulate burden is currently{' '}
-              <strong className="text-rose-300">
+              <strong className="text-rose-600 dark:text-rose-300">
                 {(telemetry.pm25 / 15).toFixed(1)}x above
               </strong>{' '}
               the WHO 24-hour health guideline limit (15 µg/m³).
@@ -195,15 +196,15 @@ export const AqiHeroCard: React.FC<AqiHeroCardProps> = ({
 
           {/* Key Insight Chip Box */}
           <div className="grid grid-cols-2 gap-3 pt-2">
-            <div className="p-3 bg-slate-950/50 rounded-xl border border-white/5">
-              <span className="text-[10px] uppercase font-bold text-slate-400 block mb-0.5">Inversion Hazard</span>
-              <span className="text-xs font-bold text-amber-300">
+            <div className="p-3 bg-slate-50 dark:bg-slate-950/50 rounded-xl border border-slate-200 dark:border-white/5">
+              <span className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 block mb-0.5">Inversion Hazard</span>
+              <span className="text-xs font-bold text-amber-700 dark:text-amber-300">
                 {telemetry.aqi > 250 ? 'Critical Morning Ceiling' : telemetry.aqi > 150 ? 'Moderate Ground Smog' : 'Active Mixing'}
               </span>
             </div>
-            <div className="p-3 bg-slate-950/50 rounded-xl border border-white/5">
-              <span className="text-[10px] uppercase font-bold text-slate-400 block mb-0.5">Ventilation Guideline</span>
-              <span className="text-xs font-bold text-emerald-300">
+            <div className="p-3 bg-slate-50 dark:bg-slate-950/50 rounded-xl border border-slate-200 dark:border-white/5">
+              <span className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 block mb-0.5">Ventilation Guideline</span>
+              <span className="text-xs font-bold text-emerald-700 dark:text-emerald-300">
                 {telemetry.aqi > 200 ? 'Mechanical HEPA Only' : '1:00 - 3:30 PM Safe Flush'}
               </span>
             </div>
@@ -213,8 +214,8 @@ export const AqiHeroCard: React.FC<AqiHeroCardProps> = ({
 
       {/* Quick City Switcher Bar */}
       {onSelectCityId && (
-        <div className="mt-8 pt-5 border-t border-white/5 flex items-center gap-3 overflow-x-auto scrollbar-none pb-1 relative z-10">
-          <span className="text-[10px] uppercase font-extrabold tracking-widest text-slate-400 shrink-0">
+        <div className="mt-8 pt-5 border-t border-slate-200 dark:border-white/5 flex items-center gap-3 overflow-x-auto scrollbar-none pb-1 relative z-10">
+          <span className="text-[10px] uppercase font-extrabold tracking-widest text-slate-500 dark:text-slate-400 shrink-0">
             Hotspots:
           </span>
           <div className="flex items-center gap-2 shrink-0">
@@ -228,8 +229,8 @@ export const AqiHeroCard: React.FC<AqiHeroCardProps> = ({
                   onClick={() => onSelectCityId(cId)}
                   className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 ${
                     isSelected
-                      ? 'bg-emerald-500 text-slate-950 shadow-glow-emerald ring-2 ring-emerald-400/50'
-                      : 'bg-slate-950/70 hover:bg-slate-800/80 border border-slate-800 text-slate-300 hover:text-white'
+                      ? 'bg-emerald-600 text-white shadow-sm ring-2 ring-emerald-500/50'
+                      : 'bg-slate-100 hover:bg-slate-200 dark:bg-slate-950/70 dark:hover:bg-slate-800/80 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
                   {city.name.split(' ')[0]}
@@ -241,110 +242,110 @@ export const AqiHeroCard: React.FC<AqiHeroCardProps> = ({
       )}
 
       {/* Comprehensive 6-Pollutant Telemetry Grid */}
-      <div className="mt-6 pt-6 border-t border-white/5 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 relative z-10">
+      <div className="mt-6 pt-6 border-t border-slate-200 dark:border-white/5 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 relative z-10">
         
         {/* PM2.5 */}
-        <div className="bg-slate-950/60 p-3.5 rounded-2xl border border-white/5 flex flex-col justify-between">
-          <div className="flex items-center justify-between text-xs text-slate-400">
-            <span className="font-bold text-white">PM2.5</span>
-            <span className="text-[10px] text-slate-500">µg/m³</span>
+        <div className="bg-slate-50/90 dark:bg-slate-950/60 p-3.5 rounded-2xl border border-slate-200 dark:border-white/5 flex flex-col justify-between">
+          <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+            <span className="font-bold text-slate-900 dark:text-white">PM2.5</span>
+            <span className="text-[10px]">µg/m³</span>
           </div>
           <div className="my-1.5">
-            <span className="text-2xl font-black text-rose-400">{telemetry.pm25}</span>
+            <span className="text-2xl font-black text-rose-600 dark:text-rose-400">{telemetry.pm25}</span>
           </div>
-          <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+          <div className="w-full bg-slate-200 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
             <div className="bg-rose-500 h-full rounded-full" style={{ width: `${Math.min(100, pm25Ratio)}%` }} />
           </div>
-          <span className="text-[10px] text-slate-400 mt-1.5">Fine soot</span>
+          <span className="text-[10px] text-slate-500 dark:text-slate-400 mt-1.5">Fine soot</span>
         </div>
 
         {/* PM10 */}
-        <div className="bg-slate-950/60 p-3.5 rounded-2xl border border-white/5 flex flex-col justify-between">
-          <div className="flex items-center justify-between text-xs text-slate-400">
-            <span className="font-bold text-white">PM10</span>
-            <span className="text-[10px] text-slate-500">µg/m³</span>
+        <div className="bg-slate-50/90 dark:bg-slate-950/60 p-3.5 rounded-2xl border border-slate-200 dark:border-white/5 flex flex-col justify-between">
+          <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+            <span className="font-bold text-slate-900 dark:text-white">PM10</span>
+            <span className="text-[10px]">µg/m³</span>
           </div>
           <div className="my-1.5">
-            <span className="text-2xl font-black text-amber-400">{telemetry.pm10}</span>
+            <span className="text-2xl font-black text-amber-600 dark:text-amber-400">{telemetry.pm10}</span>
           </div>
-          <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+          <div className="w-full bg-slate-200 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
             <div className="bg-amber-500 h-full rounded-full" style={{ width: `${Math.min(100, pm10Ratio)}%` }} />
           </div>
-          <span className="text-[10px] text-slate-400 mt-1.5">Coarse dust</span>
+          <span className="text-[10px] text-slate-500 dark:text-slate-400 mt-1.5">Coarse dust</span>
         </div>
 
         {/* NO2 */}
-        <div className="bg-slate-950/60 p-3.5 rounded-2xl border border-white/5 flex flex-col justify-between">
-          <div className="flex items-center justify-between text-xs text-slate-400">
-            <span className="font-bold text-white">NO2</span>
-            <span className="text-[10px] text-slate-500">µg/m³</span>
+        <div className="bg-slate-50/90 dark:bg-slate-950/60 p-3.5 rounded-2xl border border-slate-200 dark:border-white/5 flex flex-col justify-between">
+          <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+            <span className="font-bold text-slate-900 dark:text-white">NO2</span>
+            <span className="text-[10px]">µg/m³</span>
           </div>
           <div className="my-1.5">
-            <span className="text-2xl font-black text-cyan-400">{telemetry.no2}</span>
+            <span className="text-2xl font-black text-cyan-600 dark:text-cyan-400">{telemetry.no2}</span>
           </div>
-          <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+          <div className="w-full bg-slate-200 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
             <div className="bg-cyan-500 h-full rounded-full" style={{ width: `${Math.min(100, no2Ratio)}%` }} />
           </div>
-          <span className="text-[10px] text-slate-400 mt-1.5">Traffic exhaust</span>
+          <span className="text-[10px] text-slate-500 dark:text-slate-400 mt-1.5">Traffic exhaust</span>
         </div>
 
         {/* SO2 */}
-        <div className="bg-slate-950/60 p-3.5 rounded-2xl border border-white/5 flex flex-col justify-between">
-          <div className="flex items-center justify-between text-xs text-slate-400">
-            <span className="font-bold text-white">SO2</span>
-            <span className="text-[10px] text-slate-500">µg/m³</span>
+        <div className="bg-slate-50/90 dark:bg-slate-950/60 p-3.5 rounded-2xl border border-slate-200 dark:border-white/5 flex flex-col justify-between">
+          <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+            <span className="font-bold text-slate-900 dark:text-white">SO2</span>
+            <span className="text-[10px]">µg/m³</span>
           </div>
           <div className="my-1.5">
-            <span className="text-2xl font-black text-teal-400">{telemetry.so2}</span>
+            <span className="text-2xl font-black text-teal-600 dark:text-teal-400">{telemetry.so2}</span>
           </div>
-          <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+          <div className="w-full bg-slate-200 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
             <div className="bg-teal-500 h-full rounded-full" style={{ width: `${Math.min(100, so2Ratio)}%` }} />
           </div>
-          <span className="text-[10px] text-slate-400 mt-1.5">Industrial coal</span>
+          <span className="text-[10px] text-slate-500 dark:text-slate-400 mt-1.5">Industrial coal</span>
         </div>
 
         {/* CO */}
-        <div className="bg-slate-950/60 p-3.5 rounded-2xl border border-white/5 flex flex-col justify-between">
-          <div className="flex items-center justify-between text-xs text-slate-400">
-            <span className="font-bold text-white">CO</span>
-            <span className="text-[10px] text-slate-500">mg/m³</span>
+        <div className="bg-slate-50/90 dark:bg-slate-950/60 p-3.5 rounded-2xl border border-slate-200 dark:border-white/5 flex flex-col justify-between">
+          <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+            <span className="font-bold text-slate-900 dark:text-white">CO</span>
+            <span className="text-[10px]">mg/m³</span>
           </div>
           <div className="my-1.5">
-            <span className="text-2xl font-black text-slate-100">{telemetry.co}</span>
+            <span className="text-2xl font-black text-slate-700 dark:text-slate-100">{telemetry.co}</span>
           </div>
-          <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+          <div className="w-full bg-slate-200 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
             <div className="bg-slate-400 h-full rounded-full" style={{ width: `${Math.min(100, coRatio)}%` }} />
           </div>
-          <span className="text-[10px] text-slate-400 mt-1.5">Carbon monoxide</span>
+          <span className="text-[10px] text-slate-500 dark:text-slate-400 mt-1.5">Carbon monoxide</span>
         </div>
 
         {/* Ozone */}
-        <div className="bg-slate-950/60 p-3.5 rounded-2xl border border-white/5 flex flex-col justify-between">
-          <div className="flex items-center justify-between text-xs text-slate-400">
-            <span className="font-bold text-white">Ozone (O3)</span>
-            <span className="text-[10px] text-slate-500">µg/m³</span>
+        <div className="bg-slate-50/90 dark:bg-slate-950/60 p-3.5 rounded-2xl border border-slate-200 dark:border-white/5 flex flex-col justify-between">
+          <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+            <span className="font-bold text-slate-900 dark:text-white">Ozone</span>
+            <span className="text-[10px]">µg/m³</span>
           </div>
           <div className="my-1.5">
-            <span className="text-2xl font-black text-purple-400">{telemetry.o3}</span>
+            <span className="text-2xl font-black text-purple-600 dark:text-purple-400">{telemetry.o3}</span>
           </div>
-          <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+          <div className="w-full bg-slate-200 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
             <div className="bg-purple-500 h-full rounded-full" style={{ width: `${Math.min(100, o3Ratio)}%` }} />
           </div>
-          <span className="text-[10px] text-slate-400 mt-1.5">Photochemical</span>
+          <span className="text-[10px] text-slate-500 dark:text-slate-400 mt-1.5">Photochemical</span>
         </div>
 
       </div>
 
       {/* Attribution Banner */}
-      <div className="mt-6 pt-4 border-t border-white/5 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-400 relative z-10">
+      <div className="mt-6 pt-4 border-t border-slate-200 dark:border-white/5 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500 dark:text-slate-400 relative z-10">
         <div className="flex items-center gap-1.5">
-          <Database className="w-3.5 h-3.5 text-emerald-400" aria-hidden="true" />
+          <Database className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
           <span>
-            Telemetry Source: <strong className="text-slate-200">{telemetry.source === 'live_open_meteo' ? 'Open-Meteo European/US Atmospheric API (Live)' : 'Calibrated Historical CPCB Baseline'}</strong>
+            Telemetry Source: <strong className="text-slate-700 dark:text-slate-200">{telemetry.source === 'live_open_meteo' ? 'Open-Meteo European/US Atmospheric API (Live)' : 'Calibrated Historical CPCB Baseline'}</strong>
           </span>
         </div>
-        <div className="flex items-center gap-1.5 text-slate-400">
-          <AlertCircle className="w-3.5 h-3.5 text-amber-400" aria-hidden="true" />
+        <div className="flex items-center gap-1.5">
+          <AlertCircle className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400" aria-hidden="true" />
           <span>CPCB National Ambient Air Quality Standard (NAAQS)</span>
         </div>
       </div>

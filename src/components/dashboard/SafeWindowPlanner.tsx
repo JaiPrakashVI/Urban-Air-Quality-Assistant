@@ -30,39 +30,39 @@ export const SafeWindowPlanner: React.FC<SafeWindowPlannerProps> = ({
   return (
     <section 
       aria-labelledby="activity-planner-heading"
-      className="glass-card rounded-3xl p-6 sm:p-8 shadow-xl flex flex-col justify-between"
+      className="glass-card rounded-3xl p-6 sm:p-7 shadow-sm transition-all flex flex-col justify-between"
     >
       <div>
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
           <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-xl bg-teal-500/15 border border-teal-500/30 flex items-center justify-center text-teal-400">
+            <div className="w-10 h-10 rounded-xl bg-teal-100 dark:bg-teal-500/15 border border-teal-200 dark:border-teal-500/30 flex items-center justify-center text-teal-600 dark:text-teal-400">
               <Calendar className="w-5 h-5" aria-hidden="true" />
             </div>
             <div>
-              <h2 id="activity-planner-heading" className="text-lg font-bold text-white">
+              <h2 id="activity-planner-heading" className="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white">
                 Daily Smog Routine & Safe Window Planner
               </h2>
-              <span className="text-xs text-slate-400">
+              <span className="text-xs text-slate-500 dark:text-slate-400">
                 Atmospheric boundary layer solar mixing model
               </span>
             </div>
           </div>
 
-          <span className="text-xs font-bold px-3 py-1 rounded-full bg-teal-500/15 text-teal-300 border border-teal-500/30 self-start sm:self-auto">
+          <span className="text-xs font-bold px-3 py-1 rounded-full bg-teal-100 dark:bg-teal-500/15 text-teal-700 dark:text-teal-300 border border-teal-200 dark:border-teal-500/30 self-start sm:self-auto">
             Diurnal Forecasting
           </span>
         </div>
 
         {/* Activity Segmented Pills Switcher */}
-        <div className="flex flex-wrap gap-1.5 p-1.5 bg-slate-950/70 rounded-2xl border border-white/5 mb-6">
+        <div className="flex flex-wrap gap-1.5 p-1.5 bg-slate-100 dark:bg-slate-950/70 rounded-2xl border border-slate-200 dark:border-white/5 mb-5">
           {activities.map((a) => (
             <button
               key={a.id}
               onClick={() => setActivityType(a.id)}
               className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                 activityType === a.id
-                  ? 'bg-emerald-500 text-slate-950 shadow-glow-emerald'
-                  : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+                  ? 'bg-emerald-600 text-white shadow-xs'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-800/60'
               }`}
             >
               {a.label}
@@ -71,20 +71,20 @@ export const SafeWindowPlanner: React.FC<SafeWindowPlannerProps> = ({
         </div>
 
         {/* Hero Calculated Window Banner */}
-        <div className="bg-gradient-to-br from-slate-950 via-slate-900 to-teal-950/40 p-6 rounded-2xl border border-teal-500/30 mb-6 relative overflow-hidden shadow-lg">
+        <div className="bg-gradient-to-br from-teal-50 via-emerald-50 to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-teal-950/40 p-5 sm:p-6 rounded-2xl border border-teal-200 dark:border-teal-500/30 mb-5 relative overflow-hidden shadow-xs">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <span className="text-[10px] font-extrabold uppercase tracking-widest text-teal-400 flex items-center gap-1.5 mb-1.5">
-                <Sun className="w-4 h-4 text-amber-400 animate-spin-slow" aria-hidden="true" />
+              <span className="text-[10px] font-extrabold uppercase tracking-widest text-teal-700 dark:text-teal-400 flex items-center gap-1.5 mb-1.5">
+                <Sun className="w-4 h-4 text-amber-500 dark:text-amber-400 animate-spin-slow" aria-hidden="true" />
                 Calculated Optimal Outdoor Window Today
               </span>
 
-              <div className="text-3xl sm:text-4xl font-black text-white flex items-center gap-2.5">
-                <Clock className="w-7 h-7 text-emerald-400" aria-hidden="true" />
+              <div className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white flex items-center gap-2.5">
+                <Clock className="w-7 h-7 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
                 {safeWindow.bestWindow}
               </div>
 
-              <p className="text-xs text-slate-300 mt-2.5 max-w-xl leading-relaxed">
+              <p className="text-xs text-slate-600 dark:text-slate-300 mt-2 max-w-xl leading-relaxed">
                 {safeWindow.rationale}
               </p>
             </div>
@@ -92,17 +92,17 @@ export const SafeWindowPlanner: React.FC<SafeWindowPlannerProps> = ({
             <div className="shrink-0 self-start sm:self-auto">
               <span className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-extrabold ${
                 safeWindow.safeForCurrentPersona 
-                  ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-glow-emerald' 
-                  : 'bg-rose-500/20 text-rose-300 border border-rose-500/40 shadow-glow-rose'
+                  ? 'bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/40' 
+                  : 'bg-rose-100 dark:bg-rose-500/20 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-500/40'
               }`}>
                 {safeWindow.safeForCurrentPersona ? (
                   <>
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400" aria-hidden="true" />
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
                     Acceptable for {persona.title.split(' ')[0]}
                   </>
                 ) : (
                   <>
-                    <XCircle className="w-4 h-4 text-rose-400" aria-hidden="true" />
+                    <XCircle className="w-4 h-4 text-rose-600 dark:text-rose-400" aria-hidden="true" />
                     Caution: Inhalation Exceeds Limits
                   </>
                 )}
@@ -114,11 +114,11 @@ export const SafeWindowPlanner: React.FC<SafeWindowPlannerProps> = ({
 
       {/* 24-Hour Diurnal Timeline */}
       <div>
-        <div className="flex items-center justify-between text-xs text-slate-400 mb-3">
-          <span className="font-extrabold uppercase tracking-wider text-slate-300">
+        <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 mb-2.5">
+          <span className="font-extrabold uppercase tracking-wider text-slate-700 dark:text-slate-300">
             24-Hour Atmospheric Smog Curve:
           </span>
-          <span className="text-[11px] text-slate-500">Scroll horizontally →</span>
+          <span className="text-[11px] text-slate-400">Scroll horizontally →</span>
         </div>
 
         <div 
@@ -134,34 +134,34 @@ export const SafeWindowPlanner: React.FC<SafeWindowPlannerProps> = ({
             return (
               <div
                 key={i}
-                className={`flex flex-col items-center justify-between p-3.5 rounded-2xl border shrink-0 w-24 transition-all ${
+                className={`flex flex-col items-center justify-between p-3 rounded-2xl border shrink-0 w-24 transition-all ${
                   isWindowHour 
-                    ? 'bg-teal-950/60 border-teal-400 shadow-glow-cyan ring-1 ring-teal-400/50' 
-                    : 'bg-slate-950/60 border-white/5'
+                    ? 'bg-teal-50 dark:bg-teal-950/60 border-teal-500 shadow-xs ring-1 ring-teal-500/50' 
+                    : 'bg-slate-50 dark:bg-slate-950/60 border-slate-200 dark:border-white/5'
                 }`}
               >
-                <span className="text-xs font-bold text-slate-300">{f.time}</span>
+                <span className="text-xs font-bold text-slate-700 dark:text-slate-300">{f.time}</span>
                 
                 <div 
-                  className={`my-2.5 text-sm font-black px-2.5 py-1 rounded-lg ${colors.bg} ${colors.text} border ${colors.border}`}
+                  className={`my-2 text-sm font-black px-2 py-0.5 rounded-lg ${colors.bg} ${colors.text} border ${colors.border}`}
                   title={`${f.category}: AQI ${f.aqi}`}
                 >
                   {f.aqi}
                 </div>
 
-                <div className="text-[11px] text-slate-400 font-mono">
+                <div className="text-[11px] text-slate-500 dark:text-slate-400 font-mono">
                   {f.pm25} µg
                 </div>
 
-                <div className="mt-2 text-[10px] text-center font-bold">
+                <div className="mt-1.5 text-[10px] text-center font-bold">
                   {f.hour >= 12 && f.hour <= 16 ? (
-                    <span className="text-emerald-400 flex items-center justify-center gap-0.5">
+                    <span className="text-emerald-600 dark:text-emerald-400 flex items-center justify-center gap-0.5">
                       <Sparkles className="w-3 h-3" /> Solar
                     </span>
                   ) : f.hour >= 5 && f.hour <= 9 ? (
-                    <span className="text-rose-400">Inversion</span>
+                    <span className="text-rose-600 dark:text-rose-400">Inversion</span>
                   ) : (
-                    <span className="text-slate-500">Trapped</span>
+                    <span className="text-slate-400 dark:text-slate-500">Trapped</span>
                   )}
                 </div>
               </div>

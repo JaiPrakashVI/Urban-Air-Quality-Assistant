@@ -19,7 +19,7 @@ export function generateContextualDecision(
   // Intent 1: Children / School / Outdoor Play
   if (q.includes('child') || q.includes('kid') || q.includes('play') || q.includes('school') || q.includes('evening')) {
     if (telemetry.aqi > 180) {
-      text = `🛑 **Immediate Guidance for ${cityName} (${persona.title}):**
+      text = `**[IMMEDIATE ADVISORY] Guidance for ${cityName} (${persona.title}):**
 Do **not** allow children to play outdoors this evening. 
 
 **Scientific Justification:**
@@ -31,7 +31,7 @@ The current ambient AQI is **${telemetry.aqi} (${telemetry.category})** with PM2
 3. **School Commute Precaution:** If school opens tomorrow morning, ensure children wear sealed child-size N95 masks; avoid open e-rickshaws or walking beside congested bus corridors.`;
       suggestedActions.push('View Safe Activity Hours', 'Indoor Air Purification Hacks');
     } else {
-      text = `✅ **Play Assessment for ${cityName}:**
+      text = `**[PLAY ASSESSMENT] Assessment for ${cityName}:**
 Current air quality is **${telemetry.category} (AQI ${telemetry.aqi})**. Moderate outdoor play is acceptable, but prefer shaded parks away from heavy arterial roads. Keep total exertion under 45 minutes.`;
       suggestedActions.push('Check Hourly Smog Forecast', 'Review Mask Requirements');
     }
@@ -39,10 +39,10 @@ Current air quality is **${telemetry.category} (AQI ${telemetry.aqi})**. Moderat
 
   // Intent 2: Windows / Ventilation / Air Purifier / IAQ
   else if (q.includes('window') || q.includes('ventilate') || q.includes('purifier') || q.includes('indoor') || q.includes('house') || q.includes('home')) {
-    text = `🏠 **Indoor Air Quality (IAQ) Strategy for ${cityName}:**
+    text = `**[INDOOR AIR QUALITY ADVISORY] Strategy for ${cityName}:**
 ${iaq.ventilationRecommendedNow 
-  ? '✅ **Window Opening Safe Now:** Yes, you can perform a 15-20 minute cross-ventilation flush right now during midday solar convective mixing.'
-  : '🚫 **Keep Windows Sealed:** Do NOT open exterior windows right now. Ground-level cold inversion will flood your living space with toxic fine particulates.'}
+  ? '**Window Opening Safe Now:** Yes, you can perform a 15-20 minute cross-ventilation flush right now during midday solar convective mixing.'
+  : '**Keep Windows Sealed:** Do NOT open exterior windows right now. Ground-level cold inversion will flood your living space with toxic fine particulates.'}
 
 **Air Purifier Recommendations:**
 - **Recommended Fan Mode:** **${iaq.purifierMode}**
@@ -59,7 +59,7 @@ ${iaq.ventilationRecommendedNow
   // Intent 3: Morning Walk / Exercise / Running / Cycling
   else if (q.includes('walk') || q.includes('jog') || q.includes('running') || q.includes('marathon') || /\brun\b/.test(q) || q.includes('exercise') || q.includes('cycle') || q.includes('workout')) {
     if (telemetry.aqi > 150) {
-      text = `⚠️ **Exercise & Workout Advisory for ${cityName}:**
+      text = `**[WORKOUT ADVISORY] Exercise Advisory for ${cityName}:**
 **Suspend early morning outdoor walks and outdoor aerobic workouts.**
 
 **Scientific Justification:**
@@ -80,7 +80,7 @@ For **${persona.title}**, aerobic exertion increases pulmonary minute ventilatio
 
   // Intent 4: Commute / Transit / Travel / Metro / Car / Office
   else if (q.includes('commute') || q.includes('travel') || q.includes('metro') || q.includes('bus') || q.includes('car') || q.includes('traffic') || q.includes('office') || q.includes('route')) {
-    text = `🚇 **Low-Emission Commute Plan for ${cityName}:**
+    text = `**[COMMUTE PLAN] Low-Emission Transit Strategy for ${cityName}:**
 With current PM2.5 at **${telemetry.pm25} µg/m³**, travel mode dramatically shapes both your personal lung exposure and urban emissions.
 
 **Recommended Transit Choice:**
@@ -96,7 +96,7 @@ Wear a snug **N95 respirator** at boarding platforms, and keep car AC set strict
 
   // Intent 5: Mask / Respirator
   else if (q.includes('mask') || q.includes('n95') || q.includes('protection') || q.includes('filter')) {
-    text = `😷 **Respirator Advisory for ${cityName}:**
+    text = `**[RESPIRATOR ADVISORY] Protection Guidelines for ${cityName}:**
 **Current Mandate:** **${risk.maskRecommendation}**
 
 **Why Cloth / Surgical Masks Fail in Severe Smog:**
@@ -111,10 +111,10 @@ Standard surgical and cloth masks only block coarse particles (> 10 µm) like du
 
   // Intent 6: Symptoms / Health / Inhaler / Chest
   else if (q.includes('inhaler') || q.includes('cough') || q.includes('chest') || q.includes('throat') || q.includes('breath') || q.includes('symptom') || q.includes('doctor')) {
-    text = `🚨 **Clinical Health Precaution for ${persona.title}:**
+    text = `**[CLINICAL ALERT] Health Precaution for ${persona.title}:**
 Your calculated Vulnerability Risk Score is **${risk.riskScore}/100 (${risk.riskLevel})**.
 
-${persona.specialMedicationReminder ? `💡 **Medication Reminder:** ${persona.specialMedicationReminder}\n` : ''}
+${persona.specialMedicationReminder ? `**Medication Reminder:** ${persona.specialMedicationReminder}\n` : ''}
 **Symptom Mitigation Checklist:**
 1. **Saline Nasal Rinse:** Perform a gentle warm saline gargle and nasal rinse after outdoor exposure to wash away trapped particulate and sulfur compounds.
 2. **Hydration:** Drink 2.5–3 liters of warm water to keep mucous membranes moist and facilitate natural ciliary clearance of inhaled soot.
@@ -124,7 +124,7 @@ ${persona.specialMedicationReminder ? `💡 **Medication Reminder:** ${persona.s
 
   // Default Intent: Dynamic Comprehensive Briefing
   else {
-    text = `👋 **AeroShield Contextual Briefing for ${cityName}:**
+    text = `**AeroShield Contextual Briefing for ${cityName}:**
 Currently, ${cityName} is experiencing an **AQI of ${telemetry.aqi} (${telemetry.category})** with PM2.5 at **${telemetry.pm25} µg/m³** and dominant pollutant **${telemetry.dominantPollutant}**.
 
 Tailored for your profile (**${persona.title}**, biological risk multiplier: **${persona.baselineMultiplier}x**):

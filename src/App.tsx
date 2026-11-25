@@ -33,6 +33,25 @@ export const App: React.FC = () => {
   const [isGpsLocated, setIsGpsLocated] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'planner' | 'iaq' | 'commute' | 'assistant'>('overview');
   const [reportExported, setReportExported] = useState<boolean>(false);
+  
+  // Theme state: default to Light theme as requested
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    const saved = typeof window !== 'undefined' ? localStorage.getItem('aero_theme') : null;
+    return (saved === 'dark' || saved === 'light') ? saved : 'light';
+  });
+
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    localStorage.setItem('aero_theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'light' ? 'dark' : 'light');
+  };
 
   // Load telemetry when city changes
   useEffect(() => {
@@ -223,7 +242,7 @@ Report Generated: ${new Date().toLocaleString()}
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100 selection:bg-emerald-500 selection:text-white bg-mesh-gradient">
+    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 selection:bg-emerald-500 selection:text-white bg-mesh-gradient transition-colors">
       {/* Top Navbar */}
       <Header
         selectedCity={selectedCity}
@@ -233,102 +252,104 @@ Report Generated: ${new Date().toLocaleString()}
         onRefresh={handleRefresh}
         onDetectLocation={handleDetectLocation}
         isGpsActive={isGpsLocated}
+        theme={theme}
+        onToggleTheme={toggleTheme}
       />
 
-      {/* Main Content Area */}
-      <main id="main-content" className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-8">
+      {/* Main Content Area: Expanded container using full side space */}
+      <main id="main-content" className="flex-1 w-full max-w-[1700px] mx-auto px-4 sm:px-6 lg:px-10 py-6 sm:py-8 space-y-6 sm:space-y-8">
         
         {/* Navigation Tabs (Accessible ARIA TabList with Segmented Glass Styling) & Advisory Export Action */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <nav 
             aria-label="Dashboard views navigation" 
-            className="glass-pill p-1.5 rounded-2xl flex flex-wrap items-center gap-1.5 shadow-lg border border-white/5"
+            className="glass-pill p-1.5 rounded-2xl flex flex-wrap items-center gap-1.5 shadow-xs border border-slate-200 dark:border-white/5"
           >
-          <button
-            role="tab"
-            aria-selected={activeTab === 'overview'}
-            onClick={() => setActiveTab('overview')}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all ${
-              activeTab === 'overview'
-                ? 'bg-emerald-500 text-slate-950 shadow-glow-emerald'
-                : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-            }`}
-          >
-            <LayoutDashboard className="w-4 h-4" aria-hidden="true" />
-            <span>Overview & Clinical Risk</span>
-          </button>
+            <button
+              role="tab"
+              aria-selected={activeTab === 'overview'}
+              onClick={() => setActiveTab('overview')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
+                activeTab === 'overview'
+                  ? 'bg-emerald-600 text-white shadow-xs'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-800/60'
+              }`}
+            >
+              <LayoutDashboard className="w-4 h-4" aria-hidden="true" />
+              <span>Overview & Clinical Risk</span>
+            </button>
 
-          <button
-            role="tab"
-            aria-selected={activeTab === 'planner'}
-            onClick={() => setActiveTab('planner')}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all ${
-              activeTab === 'planner'
-                ? 'bg-teal-500 text-slate-950 shadow-glow-cyan'
-                : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-            }`}
-          >
-            <Calendar className="w-4 h-4" aria-hidden="true" />
-            <span>Daily Routine Planner</span>
-          </button>
+            <button
+              role="tab"
+              aria-selected={activeTab === 'planner'}
+              onClick={() => setActiveTab('planner')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
+                activeTab === 'planner'
+                  ? 'bg-teal-600 text-white shadow-xs'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-800/60'
+              }`}
+            >
+              <Calendar className="w-4 h-4" aria-hidden="true" />
+              <span>Daily Routine Planner</span>
+            </button>
 
-          <button
-            role="tab"
-            aria-selected={activeTab === 'iaq'}
-            onClick={() => setActiveTab('iaq')}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all ${
-              activeTab === 'iaq'
-                ? 'bg-cyan-500 text-slate-950 shadow-glow-cyan'
-                : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-            }`}
-          >
-            <Home className="w-4 h-4" aria-hidden="true" />
-            <span>Indoor Air Quality Hacks</span>
-          </button>
+            <button
+              role="tab"
+              aria-selected={activeTab === 'iaq'}
+              onClick={() => setActiveTab('iaq')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
+                activeTab === 'iaq'
+                  ? 'bg-cyan-600 text-white shadow-xs'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-800/60'
+              }`}
+            >
+              <Home className="w-4 h-4" aria-hidden="true" />
+              <span>Indoor Air Quality Hacks</span>
+            </button>
 
-          <button
-            role="tab"
-            aria-selected={activeTab === 'commute'}
-            onClick={() => setActiveTab('commute')}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all ${
-              activeTab === 'commute'
-                ? 'bg-emerald-500 text-slate-950 shadow-glow-emerald'
-                : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-            }`}
-          >
-            <Compass className="w-4 h-4" aria-hidden="true" />
-            <span>Low-Emission Commute</span>
-          </button>
+            <button
+              role="tab"
+              aria-selected={activeTab === 'commute'}
+              onClick={() => setActiveTab('commute')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
+                activeTab === 'commute'
+                  ? 'bg-emerald-600 text-white shadow-xs'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-800/60'
+              }`}
+            >
+              <Compass className="w-4 h-4" aria-hidden="true" />
+              <span>Low-Emission Commute</span>
+            </button>
 
-          <button
-            role="tab"
-            aria-selected={activeTab === 'assistant'}
-            onClick={() => setActiveTab('assistant')}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all ${
-              activeTab === 'assistant'
-                ? 'bg-purple-500 text-white shadow-glow-purple'
-                : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-            }`}
-          >
-            <MessageSquareCode className="w-4 h-4" aria-hidden="true" />
-            <span>GenAI Conversational Assistant</span>
-          </button>
-        </nav>
+            <button
+              role="tab"
+              aria-selected={activeTab === 'assistant'}
+              onClick={() => setActiveTab('assistant')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
+                activeTab === 'assistant'
+                  ? 'bg-purple-600 text-white shadow-xs'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-800/60'
+              }`}
+            >
+              <MessageSquareCode className="w-4 h-4" aria-hidden="true" />
+              <span>GenAI Assistant</span>
+            </button>
+          </nav>
 
-        {/* Action Button: Export Advisory Report */}
-        <button
-          onClick={handleExportReport}
-          className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold bg-slate-900/90 hover:bg-slate-800 text-emerald-300 border border-emerald-500/30 hover:border-emerald-500/60 shadow-md transition-all shrink-0 self-start sm:self-auto"
-          title="Download personalized clinical advisory report"
-        >
-          {reportExported ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Download className="w-3.5 h-3.5 text-emerald-400" />}
-          <span>{reportExported ? 'Advisory Downloaded' : 'Export Health Advisory'}</span>
-        </button>
-      </div>
+          {/* Action Button: Export Advisory Report */}
+          <button
+            onClick={handleExportReport}
+            className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold bg-white dark:bg-slate-900/90 hover:bg-slate-50 dark:hover:bg-slate-800 text-emerald-700 dark:text-emerald-300 border border-slate-200 dark:border-emerald-500/30 hover:border-emerald-500/60 shadow-xs transition-all shrink-0 self-start sm:self-auto"
+            title="Download personalized clinical advisory report"
+          >
+            {reportExported ? <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> : <Download className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />}
+            <span>{reportExported ? 'Advisory Downloaded' : 'Export Health Advisory'}</span>
+          </button>
+        </div>
 
         {/* Tab 1: Overview & Risk Assessment */}
         {activeTab === 'overview' && (
-          <div className="space-y-8">
+          <div className="space-y-6 sm:space-y-8">
             <AqiHeroCard 
               telemetry={telemetry} 
               cityName={selectedCity.name} 
@@ -336,22 +357,22 @@ Report Generated: ${new Date().toLocaleString()}
               onSelectCityId={handleSelectCityId}
               isGpsLocated={isGpsLocated}
             />
-            <PersonaSwitcher selectedPersona={selectedPersona} onSelectPersona={setSelectedPersona} />
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <RiskScoreCard assessment={riskAssessment} persona={selectedPersona} />
-              <SafeWindowPlanner forecasts={forecasts} persona={selectedPersona} />
-            </div>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <IaqMitigationCard plan={iaqPlan} />
-              <EcoCommuteCalculator telemetry={telemetry} />
+
+            {/* Expansive 2-Column Desktop Grid Layout */}
+            <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 sm:gap-8 items-start">
+              <div className="xl:col-span-6">
+                <PersonaSwitcher selectedPersona={selectedPersona} onSelectPersona={setSelectedPersona} />
+              </div>
+              <div className="xl:col-span-6">
+                <RiskScoreCard assessment={riskAssessment} persona={selectedPersona} />
+              </div>
             </div>
           </div>
         )}
 
         {/* Tab 2: Activity Planner */}
         {activeTab === 'planner' && (
-          <div className="space-y-8">
-            <PersonaSwitcher selectedPersona={selectedPersona} onSelectPersona={setSelectedPersona} />
+          <div className="space-y-6 sm:space-y-8">
             <SafeWindowPlanner forecasts={forecasts} persona={selectedPersona} />
             <AqiHeroCard 
               telemetry={telemetry} 
@@ -365,7 +386,7 @@ Report Generated: ${new Date().toLocaleString()}
 
         {/* Tab 3: Indoor Air Quality */}
         {activeTab === 'iaq' && (
-          <div className="space-y-8">
+          <div className="space-y-6 sm:space-y-8">
             <IaqMitigationCard plan={iaqPlan} />
             <AqiHeroCard 
               telemetry={telemetry} 
@@ -379,7 +400,7 @@ Report Generated: ${new Date().toLocaleString()}
 
         {/* Tab 4: Low-Emission Commute */}
         {activeTab === 'commute' && (
-          <div className="space-y-8">
+          <div className="space-y-6 sm:space-y-8">
             <EcoCommuteCalculator telemetry={telemetry} />
             <AqiHeroCard 
               telemetry={telemetry} 
@@ -393,9 +414,8 @@ Report Generated: ${new Date().toLocaleString()}
 
         {/* Tab 5: GenAI Conversational Assistant */}
         {activeTab === 'assistant' && (
-          <div className="space-y-8">
+          <div className="space-y-6 sm:space-y-8">
             <ChatAssistant telemetry={telemetry} persona={selectedPersona} cityName={selectedCity.name} />
-            <PersonaSwitcher selectedPersona={selectedPersona} onSelectPersona={setSelectedPersona} />
           </div>
         )}
 
