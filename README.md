@@ -3,7 +3,7 @@
 > *Built for [Challenge 6] PromptWars Virtual • Hack2skill Evaluation Framework*
 
 [![Build Status](https://img.shields.io/badge/Build-Passing-emerald?style=flat-square)](.)
-[![Tests](https://img.shields.io/badge/Tests-24%2F24%20Passing-emerald?style=flat-square)](.)
+[![Tests](https://img.shields.io/badge/Tests-29%2F29%20Passing-emerald?style=flat-square)](.)
 [![Accessibility](https://img.shields.io/badge/Accessibility-WCAG%202.1%20AA-teal?style=flat-square)](.)
 [![Repo Size](https://img.shields.io/badge/Repo%20Size-%3C%202%20MB-blue?style=flat-square)](.)
 [![Branch](https://img.shields.io/badge/Branch-main%20only-purple?style=flat-square)](.)
@@ -128,7 +128,7 @@ To help evaluators review the application quickly (as requested in the SME brief
 | **Code Quality** | **Medium Impact** | Modular TypeScript architecture (`types/`, `services/`, `engines/`, `components/`), strict typing, zero build warnings, clean separation of concerns. |
 | **Security** | **Medium Impact** | Zero committed secrets (`.env.example`), XSS entity escaping, character length capping, and regex prompt injection defense (`SECURITY.md`). |
 | **Efficiency** | **Medium Impact** | Repository size is strictly **$< 2\text{ MB}$** (far below the $10\text{ MB}$ limit); production bundle is just $70\text{ kB}$ gzipped; single Git branch (`main`). |
-| **Testing** | **Low Impact (Key Differentiator)** | **24/24 Automated Vitest Unit & Integration Tests** passing ($100\%$ pass rate) covering risk equations, security guardrails, diurnal curves, and decision engines. |
+| **Testing** | **Low Impact (Key Differentiator)** | **29/29 Automated Vitest Unit & Integration Tests** passing ($100\%$ pass rate) covering risk equations, security guardrails, diurnal curves, and decision engines. |
 | **Accessibility (a11y)** | **Low Impact (Key Differentiator)** | **WCAG 2.1 AA Certified**: semantic HTML5, visible focus rings, ARIA roles, `aria-live="polite"` dynamic chat announcements, keyboard navigable. |
 
 ---
