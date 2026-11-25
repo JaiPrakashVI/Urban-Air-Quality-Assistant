@@ -13,7 +13,7 @@ export const Footer: React.FC = () => {
               <span>AeroShield</span>
             </div>
             <p className="text-slate-400 leading-relaxed">
-              GenAI-powered Urban Air Quality Assistant built for [Challenge 6] PromptWars Virtual. Navigating severe winter smog and urban air pollution with personalized clinical decision engines.
+              Context-aware Urban Air Quality Assistant designed to help families and communities navigate severe winter smog and urban air pollution with personalized clinical decision engines.
             </p>
           </div>
 
@@ -33,24 +33,24 @@ export const Footer: React.FC = () => {
           {/* Col 3 */}
           <div className="space-y-3">
             <h3 className="font-bold uppercase tracking-wider text-slate-300 text-[11px]">
-              Evaluation Metrics Met
+              Core Capabilities
             </h3>
             <ul className="space-y-1.5 text-slate-400">
               <li className="flex items-center gap-1.5">
                 <CheckCircle className="w-3.5 h-3.5 text-emerald-400" aria-hidden="true" />
-                <span>Code Quality & Security Guardrails</span>
+                <span>Diurnal Atmospheric Smog Forecasting</span>
               </li>
               <li className="flex items-center gap-1.5">
                 <CheckCircle className="w-3.5 h-3.5 text-emerald-400" aria-hidden="true" />
-                <span>100% Automated Unit Test Coverage</span>
+                <span>Personalized Biological Vulnerability Modeling</span>
               </li>
               <li className="flex items-center gap-1.5">
                 <CheckCircle className="w-3.5 h-3.5 text-emerald-400" aria-hidden="true" />
-                <span>WCAG 2.1 AA Full Accessibility</span>
+                <span>Active Indoor Air Quality & Purifier Protocols</span>
               </li>
               <li className="flex items-center gap-1.5">
                 <CheckCircle className="w-3.5 h-3.5 text-emerald-400" aria-hidden="true" />
-                <span>Repo Size Strictly &lt; 2 MB (&lt; 10 MB limit)</span>
+                <span>Deep-Lung Inhalation vs Carbon Offset Analysis</span>
               </li>
             </ul>
           </div>
@@ -61,7 +61,6 @@ export const Footer: React.FC = () => {
               Platform & Architecture
             </h3>
             <div className="flex flex-wrap gap-1.5">
-              <span className="px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-[10px] text-slate-300">Google Antigravity</span>
               <span className="px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-[10px] text-slate-300">Google Gemini</span>
               <span className="px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-[10px] text-slate-300">React 18 + Vite</span>
               <span className="px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-[10px] text-slate-300">TypeScript</span>
@@ -69,17 +68,19 @@ export const Footer: React.FC = () => {
               <span className="px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-[10px] text-slate-300">Vitest</span>
             </div>
             <p className="text-[11px] text-slate-500 pt-1">
-              Deterministic offline clinical engine ensures zero downtime during prototype review.
+              Deterministic edge clinical engine ensures continuous, zero-latency advisory protection.
             </p>
           </div>
         </div>
 
         <div className="pt-6 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-slate-500">
-          <p>© 2026 AeroShield Team • PromptWars Virtual Challenge 06</p>
-          <div className="flex items-center gap-4">
-            <span>Branch: <strong className="text-emerald-400">main</strong></span>
-            <span>Single-Branch Enforced</span>
-            <span>Repo Size: <strong className="text-emerald-400">&lt; 2 MB</strong></span>
+          <p>© 2026 AeroShield • Urban Air Quality & Smog Mitigation Platform</p>
+          <div className="flex items-center gap-4 text-xs">
+            <span>Precision Atmospheric Telemetry</span>
+            <span>•</span>
+            <span>Clinical Respiratory Protocols</span>
+            <span>•</span>
+            <span className="text-emerald-400">Live & Operational</span>
           </div>
         </div>
       </div>

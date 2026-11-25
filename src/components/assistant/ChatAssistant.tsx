@@ -25,7 +25,7 @@ Currently in **${cityName}**, the ambient AQI is **${telemetry.aqi} (${telemetry
 
 I am tuned to your **${persona.title}** profile (Biological Risk Multiplier: **${persona.baselineMultiplier}x**).
 
-How can I help protect you and your family today? Try one of the evaluator benchmark test scenarios below or ask your own question!`,
+How can I help protect you and your family today? Select one of the quick scenario guides below or ask anything about your local air quality!`,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       suggestedActions: [
         'Can my child play outdoor this evening?',
@@ -104,13 +104,13 @@ How can I help protect you and your family today? Try one of the evaluator bench
     setTimeout(() => setCopiedId(null), 2000);
   };
 
-  // Evaluator Quick Scenarios (Directly matching SME Evaluation guidelines)
-  const evaluatorScenarios = [
-    { label: '👶 Scenario 1: Evening Child Play in Delhi', query: 'Can my 6-year-old child play outside this evening?' },
-    { label: '🫁 Scenario 2: Asthmatic Peak Smog Commute', query: 'I have asthma and need to commute 15km to work. What route and precaution should I take?' },
-    { label: '👴 Scenario 3: Senior Citizen Morning Walk', query: 'Can I go for my daily 6:00 AM morning walk today?' },
-    { label: '🏃 Scenario 4: Runner Marathon Training', query: 'When is the best window for outdoor running today?' },
-    { label: '🏠 Scenario 5: Windows & Air Purifier Setting', query: 'When should I open my apartment windows and how should I run my air purifier today?' },
+  // Common Situation Prompts (Evidence-based routine and IAQ questions)
+  const situationPrompts = [
+    { label: '👶 Evening Child Play Advice', query: 'Can my 6-year-old child play outside this evening?' },
+    { label: '🫁 Asthmatic Smog Commute Guide', query: 'I have asthma and need to commute 15km to work. What route and precaution should I take?' },
+    { label: '👴 Senior Citizen Morning Walk', query: 'Can I go for my daily 6:00 AM morning walk today?' },
+    { label: '🏃 Outdoor Running & Exercise Window', query: 'When is the best window for outdoor running today?' },
+    { label: '🏠 Ventilation & Air Purifier Settings', query: 'When should I open my apartment windows and how should I run my air purifier today?' },
   ];
 
   return (
@@ -145,18 +145,18 @@ How can I help protect you and your family today? Try one of the evaluator bench
 
         <div className="flex items-center gap-2 text-xs text-slate-400 bg-slate-950/70 px-3.5 py-1.5 rounded-2xl border border-white/5">
           <ShieldCheck className="w-4 h-4 text-emerald-400" aria-hidden="true" />
-          <span>Adversarial Injection Defense Active</span>
+          <span>Active Guardrails Protected</span>
         </div>
       </div>
 
-      {/* Evaluator Quick-Start Preset Scenarios Banner */}
+      {/* Quick Situation Prompts */}
       <div className="bg-slate-950/70 p-4 rounded-2xl border border-white/5 mb-4 relative z-10">
         <div className="flex items-center gap-2 text-xs font-bold text-emerald-400 mb-2.5">
           <Terminal className="w-4 h-4" aria-hidden="true" />
-          <span>Evaluator Benchmark Test Scenarios (Click to test):</span>
+          <span>Quick Situation Guides (Click to ask):</span>
         </div>
         <div className="flex flex-wrap gap-2">
-          {evaluatorScenarios.map((s, idx) => (
+          {situationPrompts.map((s, idx) => (
             <button
               key={idx}
               onClick={() => handleSendMessage(s.query)}

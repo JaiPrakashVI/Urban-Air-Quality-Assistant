@@ -19,8 +19,7 @@ import {
   Compass, 
   MessageSquareCode, 
   Download, 
-  Check, 
-  Target
+  Check
 } from 'lucide-react';
 
 export const App: React.FC = () => {
@@ -34,7 +33,6 @@ export const App: React.FC = () => {
   const [isGpsLocated, setIsGpsLocated] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'planner' | 'iaq' | 'commute' | 'assistant'>('overview');
   const [reportExported, setReportExported] = useState<boolean>(false);
-  const [showEvaluatorGuide, setShowEvaluatorGuide] = useState<boolean>(true);
 
   // Load telemetry when city changes
   useEffect(() => {
@@ -206,8 +204,8 @@ Target Location: ${selectedCity.name} (${selectedCity.country})
    - Inhaled PM2.5 Reduction vs Two-Wheeler: ~80% reduction
 
 ======================================================================
-Evaluator Note: Built for [Challenge 6] PromptWars Virtual • Hack2skill
-Repository: https://github.com/JaiPrakashVI/Urban-Air-Quality-Assistant
+AeroShield Clean Air Intelligence • Winter Smog Mitigation Platform
+Report Generated: ${new Date().toLocaleString()}
 ======================================================================`;
 
     const blob = new Blob([reportText], { type: 'text/plain;charset=utf-8' });
@@ -240,57 +238,12 @@ Repository: https://github.com/JaiPrakashVI/Urban-Air-Quality-Assistant
       {/* Main Content Area */}
       <main id="main-content" className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-8">
         
-        {/* Evaluator Benchmark Navigation Banner */}
-        {showEvaluatorGuide && (
-          <div className="glass-card rounded-2xl p-4 sm:p-5 border border-emerald-500/30 shadow-glow-emerald relative overflow-hidden">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div className="flex items-start gap-3">
-                <div className="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 mt-0.5">
-                  <Target className="w-5 h-5" aria-hidden="true" />
-                </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-black uppercase tracking-wider text-emerald-400">
-                      Evaluator Benchmark Protocol
-                    </span>
-                    <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300">
-                      45/45 Rubric Verification
-                    </span>
-                  </div>
-                  <p className="text-xs text-slate-300 mt-1 leading-relaxed">
-                    Testing the 3 SME Core Challenge Areas: (1) Low-emission diurnal routines, (2) Indoor air quality & purifier protocols, (3) Sustainable alternatives with justified impact.
-                  </p>
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex items-center gap-2 shrink-0">
-                <button
-                  onClick={handleExportReport}
-                  className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-900 hover:bg-slate-800 text-emerald-300 border border-emerald-500/40 shadow-sm transition-all"
-                  title="Export personalized clinical health and smog advisory"
-                >
-                  {reportExported ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Download className="w-3.5 h-3.5" />}
-                  <span>{reportExported ? 'Advisory Downloaded' : 'Export Health Report'}</span>
-                </button>
-
-                <button
-                  onClick={() => setShowEvaluatorGuide(false)}
-                  className="text-xs text-slate-400 hover:text-slate-200 p-2"
-                  aria-label="Dismiss evaluator banner"
-                >
-                  ✕
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Navigation Tabs (Accessible ARIA TabList with Segmented Glass Styling) */}
-        <nav 
-          aria-label="Dashboard views navigation" 
-          className="glass-pill p-1.5 rounded-2xl flex flex-wrap items-center gap-1.5 shadow-lg border border-white/5"
-        >
+        {/* Navigation Tabs (Accessible ARIA TabList with Segmented Glass Styling) & Advisory Export Action */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <nav 
+            aria-label="Dashboard views navigation" 
+            className="glass-pill p-1.5 rounded-2xl flex flex-wrap items-center gap-1.5 shadow-lg border border-white/5"
+          >
           <button
             role="tab"
             aria-selected={activeTab === 'overview'}
@@ -361,6 +314,17 @@ Repository: https://github.com/JaiPrakashVI/Urban-Air-Quality-Assistant
             <span>GenAI Conversational Assistant</span>
           </button>
         </nav>
+
+        {/* Action Button: Export Advisory Report */}
+        <button
+          onClick={handleExportReport}
+          className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold bg-slate-900/90 hover:bg-slate-800 text-emerald-300 border border-emerald-500/30 hover:border-emerald-500/60 shadow-md transition-all shrink-0 self-start sm:self-auto"
+          title="Download personalized clinical advisory report"
+        >
+          {reportExported ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Download className="w-3.5 h-3.5 text-emerald-400" />}
+          <span>{reportExported ? 'Advisory Downloaded' : 'Export Health Advisory'}</span>
+        </button>
+      </div>
 
         {/* Tab 1: Overview & Risk Assessment */}
         {activeTab === 'overview' && (

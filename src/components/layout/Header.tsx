@@ -84,7 +84,7 @@ export const Header: React.FC<HeaderProps> = ({
                 AeroShield
               </span>
               <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hidden sm:inline-block">
-                Challenge 06
+                Live Advisory
               </span>
             </div>
             <p className="text-xs text-slate-400 font-medium hidden md:block">
