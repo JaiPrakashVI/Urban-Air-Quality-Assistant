@@ -32,6 +32,24 @@ export const PersonaSwitcher: React.FC<PersonaSwitcherProps> = ({
     }
   };
 
+  const getPersonaSubtitle = (id: string) => {
+    switch (id) {
+      case 'asthmatic':
+        return 'Asthma, COPD & reactive airways';
+      case 'infant_parent':
+        return 'Children under 6 with developing lungs';
+      case 'elderly':
+        return 'Ages 60+ with cardiac sensitivity';
+      case 'outdoor_athlete':
+        return 'High-ventilation runners & cyclists';
+      case 'commuter':
+        return 'Daily arterial road & transit exposure';
+      case 'healthy_adult':
+      default:
+        return 'Standard preventative wellness';
+    }
+  };
+
   return (
     <section 
       aria-labelledby="persona-selector-heading"
@@ -104,7 +122,7 @@ export const PersonaSwitcher: React.FC<PersonaSwitcherProps> = ({
                   {p.title.split('/')[0].split('(')[0].trim()}
                 </div>
                 <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-1">
-                  {p.subtitle.split(',')[0].trim()}
+                  {getPersonaSubtitle(p.id)}
                 </div>
               </div>
 

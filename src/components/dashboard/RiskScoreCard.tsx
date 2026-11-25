@@ -102,7 +102,7 @@ export const RiskScoreCard: React.FC<RiskScoreCardProps> = ({ assessment, person
             </strong>
             {persona.specialMedicationReminder && (
               <span className="text-slate-600 dark:text-slate-300 block mt-1 text-[11px]">
-                {persona.specialMedicationReminder.split('.')[0]}.
+                {persona.specialMedicationReminder.split(/\.\s+/)[0]}.
               </span>
             )}
           </div>
