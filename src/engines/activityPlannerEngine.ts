@@ -5,6 +5,15 @@ export function calculateSafeActivityWindows(
   persona: VulnerabilityProfile,
   activityType: 'morning_walk' | 'school_commute' | 'outdoor_workout' | 'grocery_run' | 'general'
 ): SafeActivityWindow {
+  if (!forecasts || forecasts.length === 0) {
+    return {
+      bestWindow: '13:00 - 15:30',
+      rationale: 'Atmospheric boundary layer calculation initializing. Midday solar convective mixing generally offers the cleanest diurnal window.',
+      hours: [],
+      safeForCurrentPersona: true,
+    };
+  }
+
   // Sort or filter the forecast hours
   // Identify the lowest AQI window of at least 2 consecutive hours
   let bestStartIdx = 0;
@@ -18,11 +27,11 @@ export function calculateSafeActivityWindows(
     }
   }
 
-  const bestStartHour = forecasts[bestStartIdx];
-  const bestEndHour = forecasts[Math.min(forecasts.length - 1, bestStartIdx + 2)];
+  const bestStartHour = forecasts[bestStartIdx] || forecasts[0];
+  const bestEndHour = forecasts[Math.min(forecasts.length - 1, bestStartIdx + 2)] || forecasts[forecasts.length - 1];
 
-  const startFormatted = bestStartHour.time;
-  const endFormatted = bestEndHour.time;
+  const startFormatted = bestStartHour ? bestStartHour.time : '13:00';
+  const endFormatted = bestEndHour ? bestEndHour.time : '15:30';
   const bestWindow = `${startFormatted} - ${endFormatted}`;
 
   const avgWindowAqi = Math.round(lowestTwoHourSum / 2);

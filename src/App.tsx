@@ -18,7 +18,9 @@ export const App: React.FC = () => {
   const [selectedCity, setSelectedCity] = useState<CityPreset>(INDIAN_CITIES[0]); // Delhi (NCR)
   const [telemetry, setTelemetry] = useState<PollutantTelemetry>(INDIAN_CITIES[0].defaultTelemetry);
   const [selectedPersona, setSelectedPersona] = useState<VulnerabilityProfile>(PERSONA_PROFILES.asthmatic);
-  const [forecasts, setForecasts] = useState<HourlyForecast[]>([]);
+  const [forecasts, setForecasts] = useState<HourlyForecast[]>(() => 
+    generateDiurnalForecast(INDIAN_CITIES[0].defaultTelemetry.aqi)
+  );
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'planner' | 'iaq' | 'commute' | 'assistant'>('overview');
 

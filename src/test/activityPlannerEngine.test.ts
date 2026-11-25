@@ -6,12 +6,21 @@ import { PERSONA_PROFILES } from '../engines/vulnerabilityEngine';
 describe('Activity Planner & Diurnal Smog Engine', () => {
   const forecasts = generateDiurnalForecast(350);
 
+  it('safely handles empty or uninitialized forecasts without throwing', () => {
+    const emptyResult = calculateSafeActivityWindows(
+      [],
+      PERSONA_PROFILES.asthmatic,
+      'morning_walk'
+    );
+    expect(emptyResult.bestWindow).toBeDefined();
+    expect(emptyResult.hours).toEqual([]);
+    expect(emptyResult.safeForCurrentPersona).toBe(true);
+  });
+
   it('generates a 24-hour diurnal forecast with atmospheric boundary layer physics', () => {
     expect(forecasts).toHaveLength(24);
 
-    // Morning hours (5-8 AM) should reflect higher thermal inversion trapping
     const morningHours = forecasts.filter(f => f.hour >= 5 && f.hour <= 8);
-    // Afternoon solar hours (12-16 PM) should reflect convective mixing reduction
     const middayHours = forecasts.filter(f => f.hour >= 13 && f.hour <= 15);
 
     if (morningHours.length > 0 && middayHours.length > 0) {
@@ -49,6 +58,6 @@ describe('Activity Planner & Diurnal Smog Engine', () => {
       'outdoor_workout'
     );
 
-    expect(windowResult.rationale).toContain('ventilation');
+    expect(windowResult.rationale).toContain('minute ventilation');
   });
 });
