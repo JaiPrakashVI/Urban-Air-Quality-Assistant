@@ -26,6 +26,19 @@ export const RiskScoreCard: React.FC<RiskScoreCardProps> = ({ assessment, person
 
   const colors = getRiskColor(assessment.riskLevel);
 
+  const getShortReminder = (reminder: string) => {
+    if (reminder.includes('on your person.')) {
+      return 'Keep fast-acting rescue inhaler (e.g. Salbutamol) on your person.';
+    }
+    if (reminder.includes('than adults.')) {
+      return 'Infants breathe 3× more air per kg of body weight than adults.';
+    }
+    if (reminder.includes('early morning exposure.')) {
+      return 'Avoid early morning exposure due to cold smog inversions.';
+    }
+    return reminder;
+  };
+
   return (
     <section 
       aria-labelledby="risk-score-heading"
@@ -102,7 +115,7 @@ export const RiskScoreCard: React.FC<RiskScoreCardProps> = ({ assessment, person
             </strong>
             {persona.specialMedicationReminder && (
               <span className="text-slate-600 dark:text-slate-300 block mt-1 text-[11px]">
-                {persona.specialMedicationReminder.split(/\.\s+/)[0]}.
+                {getShortReminder(persona.specialMedicationReminder)}
               </span>
             )}
           </div>

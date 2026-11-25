@@ -35,18 +35,18 @@ export const PersonaSwitcher: React.FC<PersonaSwitcherProps> = ({
   const getPersonaSubtitle = (id: string) => {
     switch (id) {
       case 'asthmatic':
-        return 'Asthma, COPD & reactive airways';
+        return 'Asthma & reactive airways';
       case 'infant_parent':
-        return 'Children under 6 with developing lungs';
+        return 'Infants & young children';
       case 'elderly':
-        return 'Ages 60+ with cardiac sensitivity';
+        return 'Ages 60+ & cardiac care';
       case 'outdoor_athlete':
-        return 'High-ventilation runners & cyclists';
+        return 'Runners, cyclists & sports';
       case 'commuter':
-        return 'Daily arterial road & transit exposure';
+        return 'Daily road & transit travel';
       case 'healthy_adult':
       default:
-        return 'Standard preventative wellness';
+        return 'Baseline preventative care';
     }
   };
 
