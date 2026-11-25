@@ -122,7 +122,7 @@ export const App: React.FC = () => {
       <main id="main-content" className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-8">
         
         {/* Navigation Tabs (Accessible ARIA TabList) */}
-        <nav aria-label="Dashboard views navigation" className="flex border-b border-slate-800/80 overflow-x-auto pb-2 scrollbar-none gap-2">
+        <nav aria-label="Dashboard views navigation" className="flex flex-wrap items-center border-b border-slate-800/80 pb-3 gap-2">
           <button
             role="tab"
             aria-selected={activeTab === 'overview'}
