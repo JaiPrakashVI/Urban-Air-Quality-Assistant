@@ -165,7 +165,7 @@ const SafeWindowPlannerComponent: React.FC<SafeWindowPlannerProps> = ({
                 <div className="mt-1.5 text-[10px] text-center font-bold">
                   {f.hour >= 12 && f.hour <= 16 ? (
                     <span className="text-emerald-600 dark:text-emerald-400 flex items-center justify-center gap-0.5">
-                      <Sparkles className="w-3 h-3" /> Solar
+                      <Sparkles className="w-3 h-3" aria-hidden="true" /> Solar
                     </span>
                   ) : f.hour >= 5 && f.hour <= 9 ? (
                     <span className="text-rose-600 dark:text-rose-400">Inversion</span>

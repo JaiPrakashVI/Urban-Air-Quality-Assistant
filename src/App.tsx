@@ -129,6 +129,7 @@ export const App: React.FC = () => {
               id="tab-overview"
               aria-controls="panel-overview"
               aria-selected={activeTab === 'overview'}
+              tabIndex={activeTab === 'overview' ? 0 : -1}
               onClick={() => setActiveTab('overview')}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
                 activeTab === 'overview'
@@ -145,6 +146,7 @@ export const App: React.FC = () => {
               id="tab-planner"
               aria-controls="panel-planner"
               aria-selected={activeTab === 'planner'}
+              tabIndex={activeTab === 'planner' ? 0 : -1}
               onClick={() => setActiveTab('planner')}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
                 activeTab === 'planner'
@@ -161,6 +163,7 @@ export const App: React.FC = () => {
               id="tab-iaq"
               aria-controls="panel-iaq"
               aria-selected={activeTab === 'iaq'}
+              tabIndex={activeTab === 'iaq' ? 0 : -1}
               onClick={() => setActiveTab('iaq')}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
                 activeTab === 'iaq'
@@ -177,6 +180,7 @@ export const App: React.FC = () => {
               id="tab-commute"
               aria-controls="panel-commute"
               aria-selected={activeTab === 'commute'}
+              tabIndex={activeTab === 'commute' ? 0 : -1}
               onClick={() => setActiveTab('commute')}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
                 activeTab === 'commute'
@@ -193,6 +197,7 @@ export const App: React.FC = () => {
               id="tab-assistant"
               aria-controls="panel-assistant"
               aria-selected={activeTab === 'assistant'}
+              tabIndex={activeTab === 'assistant' ? 0 : -1}
               onClick={() => setActiveTab('assistant')}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
                 activeTab === 'assistant'
@@ -211,115 +216,115 @@ export const App: React.FC = () => {
             className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold bg-white dark:bg-slate-900/90 hover:bg-slate-50 dark:hover:bg-slate-800 text-emerald-700 dark:text-emerald-300 border border-slate-200 dark:border-emerald-500/30 hover:border-emerald-500/60 shadow-xs transition-all shrink-0 self-start sm:self-auto"
             title="Download personalized clinical advisory report"
           >
-            {reportExported ? <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> : <Download className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />}
+            {reportExported ? <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" aria-hidden="true" /> : <Download className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />}
             <span>{reportExported ? 'Advisory Downloaded' : 'Export Health Advisory'}</span>
           </button>
         </div>
 
         {/* Tab 1: Overview & Risk Assessment */}
-        {activeTab === 'overview' && (
-          <div 
-            id="panel-overview" 
-            role="tabpanel" 
-            aria-labelledby="tab-overview"
-            className="space-y-6 sm:space-y-8"
-          >
-            <AqiHeroCard 
-              telemetry={telemetry} 
-              cityName={selectedCity.name} 
-              activeCityId={selectedCity.id}
-              onSelectCityId={handleSelectCityId}
-              isGpsLocated={isGpsLocated}
-            />
+        <div 
+          id="panel-overview" 
+          role="tabpanel" 
+          tabIndex={0}
+          aria-labelledby="tab-overview"
+          hidden={activeTab !== 'overview'}
+          className={activeTab === 'overview' ? 'space-y-6 sm:space-y-8 focus:outline-none' : 'hidden'}
+        >
+          <AqiHeroCard 
+            telemetry={telemetry} 
+            cityName={selectedCity.name} 
+            activeCityId={selectedCity.id}
+            onSelectCityId={handleSelectCityId}
+            isGpsLocated={isGpsLocated}
+          />
 
-            {/* Expansive 2-Column Desktop Grid Layout */}
-            <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 sm:gap-8 items-start">
-              <div className="xl:col-span-6">
-                <PersonaSwitcher selectedPersona={selectedPersona} onSelectPersona={setSelectedPersona} />
-              </div>
-              <div className="xl:col-span-6">
-                <RiskScoreCard assessment={riskAssessment} persona={selectedPersona} />
-              </div>
+          {/* Expansive 2-Column Desktop Grid Layout */}
+          <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 sm:gap-8 items-start">
+            <div className="xl:col-span-6">
+              <PersonaSwitcher selectedPersona={selectedPersona} onSelectPersona={setSelectedPersona} />
+            </div>
+            <div className="xl:col-span-6">
+              <RiskScoreCard assessment={riskAssessment} persona={selectedPersona} />
             </div>
           </div>
-        )}
+        </div>
 
         {/* Tab 2: Activity Planner */}
-        {activeTab === 'planner' && (
-          <div 
-            id="panel-planner" 
-            role="tabpanel" 
-            aria-labelledby="tab-planner"
-            className="space-y-6 sm:space-y-8"
-          >
-            <Suspense fallback={<TabLoadingSkeleton />}>
-              <SafeWindowPlanner forecasts={forecasts} persona={selectedPersona} />
-            </Suspense>
-            <AqiHeroCard 
-              telemetry={telemetry} 
-              cityName={selectedCity.name} 
-              activeCityId={selectedCity.id}
-              onSelectCityId={handleSelectCityId}
-              isGpsLocated={isGpsLocated}
-            />
-          </div>
-        )}
+        <div 
+          id="panel-planner" 
+          role="tabpanel" 
+          tabIndex={0}
+          aria-labelledby="tab-planner"
+          hidden={activeTab !== 'planner'}
+          className={activeTab === 'planner' ? 'space-y-6 sm:space-y-8 focus:outline-none' : 'hidden'}
+        >
+          <Suspense fallback={<TabLoadingSkeleton />}>
+            <SafeWindowPlanner forecasts={forecasts} persona={selectedPersona} />
+          </Suspense>
+          <AqiHeroCard 
+            telemetry={telemetry} 
+            cityName={selectedCity.name} 
+            activeCityId={selectedCity.id}
+            onSelectCityId={handleSelectCityId}
+            isGpsLocated={isGpsLocated}
+          />
+        </div>
 
         {/* Tab 3: Indoor Air Quality */}
-        {activeTab === 'iaq' && (
-          <div 
-            id="panel-iaq" 
-            role="tabpanel" 
-            aria-labelledby="tab-iaq"
-            className="space-y-6 sm:space-y-8"
-          >
-            <Suspense fallback={<TabLoadingSkeleton />}>
-              <IaqMitigationCard plan={iaqPlan} />
-            </Suspense>
-            <AqiHeroCard 
-              telemetry={telemetry} 
-              cityName={selectedCity.name} 
-              activeCityId={selectedCity.id}
-              onSelectCityId={handleSelectCityId}
-              isGpsLocated={isGpsLocated}
-            />
-          </div>
-        )}
+        <div 
+          id="panel-iaq" 
+          role="tabpanel" 
+          tabIndex={0}
+          aria-labelledby="tab-iaq"
+          hidden={activeTab !== 'iaq'}
+          className={activeTab === 'iaq' ? 'space-y-6 sm:space-y-8 focus:outline-none' : 'hidden'}
+        >
+          <Suspense fallback={<TabLoadingSkeleton />}>
+            <IaqMitigationCard plan={iaqPlan} />
+          </Suspense>
+          <AqiHeroCard 
+            telemetry={telemetry} 
+            cityName={selectedCity.name} 
+            activeCityId={selectedCity.id}
+            onSelectCityId={handleSelectCityId}
+            isGpsLocated={isGpsLocated}
+          />
+        </div>
 
         {/* Tab 4: Low-Emission Commute */}
-        {activeTab === 'commute' && (
-          <div 
-            id="panel-commute" 
-            role="tabpanel" 
-            aria-labelledby="tab-commute"
-            className="space-y-6 sm:space-y-8"
-          >
-            <Suspense fallback={<TabLoadingSkeleton />}>
-              <EcoCommuteCalculator telemetry={telemetry} />
-            </Suspense>
-            <AqiHeroCard 
-              telemetry={telemetry} 
-              cityName={selectedCity.name} 
-              activeCityId={selectedCity.id}
-              onSelectCityId={handleSelectCityId}
-              isGpsLocated={isGpsLocated}
-            />
-          </div>
-        )}
+        <div 
+          id="panel-commute" 
+          role="tabpanel" 
+          tabIndex={0}
+          aria-labelledby="tab-commute"
+          hidden={activeTab !== 'commute'}
+          className={activeTab === 'commute' ? 'space-y-6 sm:space-y-8 focus:outline-none' : 'hidden'}
+        >
+          <Suspense fallback={<TabLoadingSkeleton />}>
+            <EcoCommuteCalculator telemetry={telemetry} />
+          </Suspense>
+          <AqiHeroCard 
+            telemetry={telemetry} 
+            cityName={selectedCity.name} 
+            activeCityId={selectedCity.id}
+            onSelectCityId={handleSelectCityId}
+            isGpsLocated={isGpsLocated}
+          />
+        </div>
 
         {/* Tab 5: GenAI Conversational Assistant */}
-        {activeTab === 'assistant' && (
-          <div 
-            id="panel-assistant" 
-            role="tabpanel" 
-            aria-labelledby="tab-assistant"
-            className="space-y-6 sm:space-y-8"
-          >
-            <Suspense fallback={<TabLoadingSkeleton />}>
-              <ChatAssistant telemetry={telemetry} persona={selectedPersona} cityName={selectedCity.name} />
-            </Suspense>
-          </div>
-        )}
+        <div 
+          id="panel-assistant" 
+          role="tabpanel" 
+          tabIndex={0}
+          aria-labelledby="tab-assistant"
+          hidden={activeTab !== 'assistant'}
+          className={activeTab === 'assistant' ? 'space-y-6 sm:space-y-8 focus:outline-none' : 'hidden'}
+        >
+          <Suspense fallback={<TabLoadingSkeleton />}>
+            <ChatAssistant telemetry={telemetry} persona={selectedPersona} cityName={selectedCity.name} />
+          </Suspense>
+        </div>
 
       </main>
 

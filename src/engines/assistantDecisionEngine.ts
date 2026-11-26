@@ -2,6 +2,16 @@ import { PollutantTelemetry, VulnerabilityProfile, AssistantMessage } from '../t
 import { calculatePersonalRisk } from './vulnerabilityEngine';
 import { calculateIaqMitigation } from './iaqMitigationEngine';
 
+/**
+ * Deterministic local conversational decision engine providing immediate, offline-capable,
+ * clinically grounded guidance tailored to user query intent, atmospheric metrics, and vulnerability profiles.
+ *
+ * @param query Free-form user input query
+ * @param telemetry Real-time atmospheric pollutant concentrations and weather metrics
+ * @param persona Selected biological vulnerability profile
+ * @param cityName Target municipality or urban agglomeration name
+ * @returns Structured AssistantMessage containing synthesized clinical advice and action chips
+ */
 export function generateContextualDecision(
   query: string,
   telemetry: PollutantTelemetry,

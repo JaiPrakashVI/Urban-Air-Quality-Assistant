@@ -95,6 +95,9 @@ const EcoCommuteCalculatorComponent: React.FC<EcoCommuteCalculatorProps> = ({ te
       {/* Transit Modes Comparison Table */}
       <div className="overflow-x-auto rounded-2xl border border-slate-200 dark:border-white/5 bg-slate-50/80 dark:bg-slate-950/60">
         <table className="w-full text-left text-xs text-slate-700 dark:text-slate-300" aria-label="Transit Modes Comparison">
+          <caption className="sr-only">
+            Comparison of transportation commute modes evaluating direct inhaled PM2.5 exposure and carbon emissions
+          </caption>
           <thead className="bg-slate-100 dark:bg-slate-900/80 text-[11px] text-slate-600 dark:text-slate-300 font-bold border-b border-slate-200 dark:border-white/5">
             <tr>
               <th scope="col" className="p-3.5">Commute Mode</th>

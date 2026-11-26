@@ -1,6 +1,7 @@
 import { PollutantTelemetry, VulnerabilityProfile, AssistantMessage } from '../types/aqi';
 import { generateContextualDecision } from '../engines/assistantDecisionEngine';
 import { logger } from '../utils/logger';
+import { AssistantServiceError } from '../utils/errors';
 
 /**
  * Service to interface with Google Gemini API when configured,
@@ -85,14 +86,14 @@ Instructions:
   });
 
   if (!res.ok) {
-    throw new Error(`Gemini API returned status ${res.status}`);
+    throw new AssistantServiceError(`Gemini API returned status ${res.status}`);
   }
 
   const data = await res.json();
   const generatedText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
 
   if (!generatedText) {
-    throw new Error('Gemini API returned empty candidate text');
+    throw new AssistantServiceError('Gemini API returned empty candidate text');
   }
 
   return {

@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { PollutantTelemetry, VulnerabilityProfile, AssistantMessage } from '../../types/aqi';
 import { askAssistant } from '../../services/geminiService';
 import { validateUserQuery } from '../../services/securitySanitizer';
+import { logger } from '../../utils/logger';
 import { Bot, Send, User, Sparkles, AlertCircle, ShieldCheck, Terminal, Copy, Check } from 'lucide-react';
 
 interface ChatAssistantProps {
@@ -78,7 +79,7 @@ How can I help protect you and your family today? Select one of the quick scenar
       );
       setMessages((prev) => [...prev, assistantReply]);
     } catch (err) {
-      console.error('[ChatAssistant] Error asking assistant:', err);
+      logger.error('Error asking assistant in ChatAssistant', err);
       const fallbackReply: AssistantMessage = {
         id: `err-${Date.now()}`,
         sender: 'assistant',
@@ -238,12 +239,12 @@ How can I help protect you and your family today? Select one of the quick scenar
                     >
                       {copiedId === m.id ? (
                         <>
-                          <Check className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                          <Check className="w-3 h-3 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
                           <span className="text-emerald-600 dark:text-emerald-400">Copied</span>
                         </>
                       ) : (
                         <>
-                          <Copy className="w-3 h-3" />
+                          <Copy className="w-3 h-3" aria-hidden="true" />
                           <span>Copy</span>
                         </>
                       )}
@@ -258,10 +259,10 @@ How can I help protect you and your family today? Select one of the quick scenar
         {isLoading && (
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-900 text-emerald-600 dark:text-emerald-400 border border-slate-200 dark:border-white/10 flex items-center justify-center shrink-0">
-              <Bot className="w-4 h-4 animate-spin" />
+              <Bot className="w-4 h-4 animate-spin" aria-hidden="true" />
             </div>
             <div className="bg-white dark:bg-slate-950/85 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-white/10 rounded-3xl rounded-tl-none p-4 text-xs flex items-center gap-2.5 shadow-xs">
-              <Sparkles className="w-4 h-4 text-emerald-600 dark:text-emerald-400 animate-pulse" />
+              <Sparkles className="w-4 h-4 text-emerald-600 dark:text-emerald-400 animate-pulse" aria-hidden="true" />
               <span>Analyzing atmospheric boundary layer and synthesizing clinical health advisory...</span>
             </div>
           </div>
