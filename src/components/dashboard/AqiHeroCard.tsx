@@ -11,6 +11,12 @@ interface AqiHeroCardProps {
   isGpsLocated?: boolean;
 }
 
+/**
+ * Primary Atmospheric Dashboard Hero Component.
+ * Displays real-time AQI speedometer gauge, meteorological telemetry,
+ * atmospheric diagnostics (thermal inversion ceiling, WHO exceedance), quick-select urban hotspots,
+ * and 6-pollutant progress bars (PM2.5, PM10, NO2, SO2, CO, O3) with full ARIA semantics.
+ */
 const AqiHeroCardComponent: React.FC<AqiHeroCardProps> = ({
   telemetry,
   cityName,

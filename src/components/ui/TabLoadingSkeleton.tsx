@@ -1,5 +1,9 @@
 import React from 'react';
 
+/**
+ * Route-Level Async Suspense Fallback Component.
+ * Displays accessible loading placeholder cards matching the dimensions of split modules.
+ */
 export const TabLoadingSkeleton: React.FC = () => {
   return (
     <div 

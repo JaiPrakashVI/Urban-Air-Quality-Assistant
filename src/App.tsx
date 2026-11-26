@@ -38,6 +38,11 @@ const ChatAssistant = lazy(() =>
 
 type ActiveTab = 'overview' | 'planner' | 'iaq' | 'commute' | 'assistant';
 
+/**
+ * Root Application Container.
+ * Coordinates custom hooks (useTheme, useAirQuality, useGeolocation, useHealthReport),
+ * accessible W3C APG tab views, dynamic code-split routes, and memoized clinical calculations.
+ */
 export const App: React.FC = () => {
   // Theme management via custom hook
   const { theme, toggleTheme } = useTheme();

@@ -7,6 +7,11 @@ interface RiskScoreCardProps {
   persona: VulnerabilityProfile;
 }
 
+/**
+ * Personalized Inhalation Burden & Risk Assessment Card.
+ * Renders the calculated 0-100 composite health vulnerability index, recommended certified
+ * respirator tier (N95/FFP2/N99), biological intake multiple, safe AQI ceiling, and clinical precautions.
+ */
 const RiskScoreCardComponent: React.FC<RiskScoreCardProps> = ({ assessment, persona }) => {
   const getRiskColor = (level: RiskAssessment['riskLevel']) => {
     switch (level) {

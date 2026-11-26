@@ -1,5 +1,19 @@
 import { PollutantTelemetry, IaqMitigationPlan } from '../types/aqi';
 
+// Atmospheric dispersion and ventilation thresholds
+export const SOLAR_MIXING_WINDOW_HOURS = {
+  start: 12, // 12:00 PM solar midday
+  end: 16,   // 04:00 PM convective decline
+} as const;
+
+export const MAX_SAFE_VENTILATION_AQI = 200;
+
+export const PURIFIER_AQI_THRESHOLDS = {
+  severe: 300,
+  high: 200,
+  moderate: 100,
+} as const;
+
 /**
  * Derives indoor air quality (IAQ) mitigation protocols based on atmospheric boundary physics,
  * ambient PM2.5 concentrations, and building envelope infiltration mechanics.
@@ -15,19 +29,18 @@ export function calculateIaqMitigation(
   const outdoorAqi = telemetry.aqi;
   const pm25 = telemetry.pm25;
 
-  // Atmospheric physics:
-  // Is it safe to ventilate right now?
-  // Solar convective mixing occurs between 12:00 (noon) and 16:00 (4 PM)
+  // Atmospheric boundary physics:
+  // Solar convective mixing dilutes ground particulate between 12:00 (noon) and 16:00 (4 PM)
   // Stagnant inversion layer holds smog tight during 20:00 - 09:00
-  const isSolarConvectiveWindow = currentHour >= 12 && currentHour <= 16;
-  const isOutdoorManageable = outdoorAqi < 200;
+  const isSolarConvectiveWindow = currentHour >= SOLAR_MIXING_WINDOW_HOURS.start && currentHour <= SOLAR_MIXING_WINDOW_HOURS.end;
+  const isOutdoorManageable = outdoorAqi < MAX_SAFE_VENTILATION_AQI;
 
   const ventilationRecommendedNow = isSolarConvectiveWindow && isOutdoorManageable;
 
   let ventilationReason = '';
   if (ventilationRecommendedNow) {
     ventilationReason = `Solar heating has dilated the atmospheric boundary layer, reducing surface particulate density. Open opposite windows for a brisk 15-20 minute cross-ventilation flush now to remove stale indoor CO2 and VOC buildup.`;
-  } else if (isSolarConvectiveWindow && outdoorAqi >= 200) {
+  } else if (isSolarConvectiveWindow && outdoorAqi >= MAX_SAFE_VENTILATION_AQI) {
     ventilationReason = `Even during afternoon solar mixing, outdoor PM2.5 (${pm25} µg/m³) is too hazardous for open windows. Rely on indoor mechanical filtration with periodic cracked-door exhaust ventilation.`;
   } else {
     ventilationReason = `Keep all exterior windows and balcony doors sealed. Surface cold air has formed a thermal inversion ceiling that traps vehicular and industrial toxins at ground level.`;
@@ -37,13 +50,13 @@ export function calculateIaqMitigation(
   let purifierMode: IaqMitigationPlan['purifierMode'] = 'Off';
   let recommendedPurifierRuntimeHours = 0;
 
-  if (outdoorAqi > 300) {
+  if (outdoorAqi > PURIFIER_AQI_THRESHOLDS.severe) {
     purifierMode = 'Turbo / Max';
     recommendedPurifierRuntimeHours = 24; // Continuous during severe smog
-  } else if (outdoorAqi > 200) {
+  } else if (outdoorAqi > PURIFIER_AQI_THRESHOLDS.high) {
     purifierMode = 'Medium';
     recommendedPurifierRuntimeHours = 18;
-  } else if (outdoorAqi > 100) {
+  } else if (outdoorAqi > PURIFIER_AQI_THRESHOLDS.moderate) {
     purifierMode = 'Auto / Low';
     recommendedPurifierRuntimeHours = 10;
   } else {

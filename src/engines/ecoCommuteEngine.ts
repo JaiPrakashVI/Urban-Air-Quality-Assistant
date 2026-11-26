@@ -1,75 +1,110 @@
 import { CommuteComparison, PollutantTelemetry } from '../types/aqi';
 
+// Physiological respiratory ventilation volumes (m³/hour)
+export const BREATHING_RATES_M3_HR = {
+  resting: 0.72,  // ~12 L/min baseline sedentary breathing volume
+  exertion: 1.08, // ~18 L/min active outdoor driving / physical exertion
+} as const;
+
+// Typical Indian urban commuter speeds (km/h) accounting for corridor congestion
+export const TRANSIT_SPEEDS_KMH = {
+  metro: 35,
+  electric_bus: 20,
+  carpool: 22,
+  diesel_bus: 18,
+  solo_car: 25,
+  two_wheeler: 25,
+} as const;
+
+// Fine particulate penetration coefficients through cabin/vehicle filters (0.0 = total filtration, 1.0 = ambient)
+export const PM25_PENETRATION_COEFFICIENTS = {
+  metro: 0.20,       // 80% filtration efficiency via industrial HVAC
+  electric_bus: 0.45,// 55% filtration in modern AC EV bus coaches
+  carpool: 0.35,     // 65% filtration in passenger car AC recirculation
+  diesel_bus: 0.80,  // Semi-open windows with high passenger ingress
+  solo_car: 0.35,    // 65% filtration in passenger car AC recirculation
+  two_wheeler: 1.25, // Unshielded breathing zone in direct roadside tailpipe plume (+25% spike)
+} as const;
+
+// Well-to-wheel carbon dioxide emissions per passenger-kilometer (kg CO₂/p-km)
+export const TRANSIT_CO2_EMISSIONS_KG_PER_KM = {
+  metro: 0.014,        // 14g CO2/passenger-km
+  electric_bus: 0.025, // 25g CO2/passenger-km
+  carpool: 0.160 / 3,  // 160g shared across 3 passengers (~53g/passenger-km)
+  diesel_bus: 0.065,   // 65g CO2/passenger-km
+  solo_car: 0.185,     // 185g CO2/km (Single occupancy ICE)
+  two_wheeler: 0.075,  // 75g CO2/km
+} as const;
+
+/**
+ * Computes comparative multi-modal commute impact across 6 urban transit modes,
+ * measuring direct microgram PM2.5 lung deposition and carbon footprint.
+ *
+ * @param telemetry Real-time atmospheric observations
+ * @param distanceKm Commute distance in kilometers (default: 15 km)
+ * @returns Array of CommuteComparison objects sorted with recommended sustainable alternatives
+ */
 export function calculateCommuteImpact(
   telemetry: PollutantTelemetry,
   distanceKm: number = 15
 ): CommuteComparison[] {
-  const ambientPm25 = telemetry.pm25; // µg/m³
-  
-  // Resting breathing rate: ~12 L/min = 0.72 m³/hour
-  // Exertion breathing rate (two-wheeler): ~18 L/min = 1.08 m³/hour
+  const ambientPm25 = telemetry.pm25;
   const safeDistance = Math.max(1, distanceKm);
 
-  // Time in hours based on typical urban transit speeds
-  const metroHours = safeDistance / 35;
-  const eBusHours = safeDistance / 20;
-  const carpoolHours = safeDistance / 22;
-  const dieselBusHours = safeDistance / 18;
-  const soloCarHours = safeDistance / 25;
-  const twoWheelerHours = safeDistance / 25;
+  // Travel duration in hours derived from realistic urban speeds
+  const metroHours = safeDistance / TRANSIT_SPEEDS_KMH.metro;
+  const eBusHours = safeDistance / TRANSIT_SPEEDS_KMH.electric_bus;
+  const carpoolHours = safeDistance / TRANSIT_SPEEDS_KMH.carpool;
+  const dieselBusHours = safeDistance / TRANSIT_SPEEDS_KMH.diesel_bus;
+  const soloCarHours = safeDistance / TRANSIT_SPEEDS_KMH.solo_car;
+  const twoWheelerHours = safeDistance / TRANSIT_SPEEDS_KMH.two_wheeler;
 
   const modes: CommuteComparison[] = [
     {
       mode: 'metro',
       label: 'Metro Rail (High-Capacity Filtered Transit)',
-      // Metro air systems filter out ~80% of outdoor PM2.5 (0.20 penetration)
-      inhalationExposureMicrograms: Math.round(metroHours * 0.72 * (ambientPm25 * 0.20) * 10) / 10,
-      co2EmissionsKg: Math.round(safeDistance * 0.014 * 100) / 100, // 14g CO2/passenger-km
+      inhalationExposureMicrograms: Math.round(metroHours * BREATHING_RATES_M3_HR.resting * (ambientPm25 * PM25_PENETRATION_COEFFICIENTS.metro) * 10) / 10,
+      co2EmissionsKg: Math.round(safeDistance * TRANSIT_CO2_EMISSIONS_KG_PER_KM.metro * 100) / 100,
       recommended: true,
       notes: 'HEPA-conditioned cabins remove 80%+ of roadside fine soot. Zero street-level tailpipe emissions.'
     },
     {
       mode: 'electric_bus',
       label: 'Electric Bus (Public EV Transit)',
-      // Air filter efficiency ~55% (0.45 penetration)
-      inhalationExposureMicrograms: Math.round(eBusHours * 0.72 * (ambientPm25 * 0.45) * 10) / 10,
-      co2EmissionsKg: Math.round(safeDistance * 0.025 * 100) / 100, // 25g CO2/passenger-km
+      inhalationExposureMicrograms: Math.round(eBusHours * BREATHING_RATES_M3_HR.resting * (ambientPm25 * PM25_PENETRATION_COEFFICIENTS.electric_bus) * 10) / 10,
+      co2EmissionsKg: Math.round(safeDistance * TRANSIT_CO2_EMISSIONS_KG_PER_KM.electric_bus * 100) / 100,
       recommended: true,
       notes: 'Clean propulsion; closed AC coaches isolate passengers from immediate tailpipe plumes.'
     },
     {
       mode: 'carpool',
       label: 'Carpooling (3+ Passengers in EV/CNG Car)',
-      // AC recirculate cabin filter ~65% efficiency (0.35 penetration)
-      inhalationExposureMicrograms: Math.round(carpoolHours * 0.72 * (ambientPm25 * 0.35) * 10) / 10,
-      co2EmissionsKg: Math.round((safeDistance * 0.160 / 3) * 100) / 100, // Shared across 3 people
+      inhalationExposureMicrograms: Math.round(carpoolHours * BREATHING_RATES_M3_HR.resting * (ambientPm25 * PM25_PENETRATION_COEFFICIENTS.carpool) * 10) / 10,
+      co2EmissionsKg: Math.round(safeDistance * TRANSIT_CO2_EMISSIONS_KG_PER_KM.carpool * 100) / 100,
       recommended: true,
       notes: 'Reduces per-person carbon emissions by 66% while maintaining enclosed cabin filtration.'
     },
     {
       mode: 'diesel_bus',
       label: 'Standard City Bus (CNG/Diesel)',
-      // Semi-open windows; filter efficiency ~20% (0.80 penetration)
-      inhalationExposureMicrograms: Math.round(dieselBusHours * 0.72 * (ambientPm25 * 0.80) * 10) / 10,
-      co2EmissionsKg: Math.round(safeDistance * 0.065 * 100) / 100,
+      inhalationExposureMicrograms: Math.round(dieselBusHours * BREATHING_RATES_M3_HR.resting * (ambientPm25 * PM25_PENETRATION_COEFFICIENTS.diesel_bus) * 10) / 10,
+      co2EmissionsKg: Math.round(safeDistance * TRANSIT_CO2_EMISSIONS_KG_PER_KM.diesel_bus * 100) / 100,
       recommended: false,
       notes: 'Mass transit efficiency is good, but frequent door openings draw in roadside exhaust; N95 mask required.'
     },
     {
       mode: 'solo_car',
       label: 'Solo Passenger Car (Single Occupancy ICE)',
-      // Enclosed cabin AC in recirculate mode protects passenger (~65% filter), BUT worst emissions
-      inhalationExposureMicrograms: Math.round(soloCarHours * 0.72 * (ambientPm25 * 0.35) * 10) / 10,
-      co2EmissionsKg: Math.round(safeDistance * 0.185 * 100) / 100, // 185g CO2/km
+      inhalationExposureMicrograms: Math.round(soloCarHours * BREATHING_RATES_M3_HR.resting * (ambientPm25 * PM25_PENETRATION_COEFFICIENTS.solo_car) * 10) / 10,
+      co2EmissionsKg: Math.round(safeDistance * TRANSIT_CO2_EMISSIONS_KG_PER_KM.solo_car * 100) / 100,
       recommended: false,
       notes: 'Heaviest carbon burden (~2.8 kg CO2). Directly compounds urban traffic gridlock and evening smog trapping.'
     },
     {
       mode: 'two_wheeler',
       label: 'Two-Wheeler (Motorcycle / Scooter / Auto)',
-      // Exposed to breathing zone at tailpipe height (+25% spike) with high physical ventilation
-      inhalationExposureMicrograms: Math.round(twoWheelerHours * 1.08 * (ambientPm25 * 1.25) * 10) / 10,
-      co2EmissionsKg: Math.round(safeDistance * 0.075 * 100) / 100,
+      inhalationExposureMicrograms: Math.round(twoWheelerHours * BREATHING_RATES_M3_HR.exertion * (ambientPm25 * PM25_PENETRATION_COEFFICIENTS.two_wheeler) * 10) / 10,
+      co2EmissionsKg: Math.round(safeDistance * TRANSIT_CO2_EMISSIONS_KG_PER_KM.two_wheeler * 100) / 100,
       recommended: false,
       notes: 'HAZARDOUS IN HIGH AQI: Commuter sits directly in the hot exhaust plume of diesel trucks and buses with zero physical barrier.'
     }

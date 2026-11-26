@@ -6,6 +6,11 @@ interface IaqMitigationCardProps {
   plan: IaqMitigationPlan;
 }
 
+/**
+ * Indoor Air Quality (IAQ) & Home Defense Protocol Component.
+ * Presents real-time window flushing suitability, HEPA air purifier mode,
+ * recommended operating runtime hours, and evidence-based DIY envelope mitigation hacks.
+ */
 const IaqMitigationCardComponent: React.FC<IaqMitigationCardProps> = ({ plan }) => {
   return (
     <section 

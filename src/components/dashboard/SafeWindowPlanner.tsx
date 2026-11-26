@@ -9,6 +9,11 @@ interface SafeWindowPlannerProps {
   persona: VulnerabilityProfile;
 }
 
+/**
+ * Diurnal Atmospheric Routine & Safe Window Planner Component.
+ * Analyzes 24-hour boundary-layer dispersion curves to identify lowest-pollution windows
+ * across 5 activity contexts (morning walk, school commute, workout, grocery run, general).
+ */
 const SafeWindowPlannerComponent: React.FC<SafeWindowPlannerProps> = ({
   forecasts,
   persona,

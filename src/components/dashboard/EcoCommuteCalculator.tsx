@@ -7,6 +7,11 @@ interface EcoCommuteCalculatorProps {
   telemetry: PollutantTelemetry;
 }
 
+/**
+ * Multi-Modal Low-Emission Commute & Exposure Calculator Component.
+ * Interactively compares 6 urban transit modes for direct microgram PM2.5 inhalation
+ * and calculates personal & planetary carbon savings with mature tree equivalents.
+ */
 const EcoCommuteCalculatorComponent: React.FC<EcoCommuteCalculatorProps> = ({ telemetry }) => {
   const [distanceKm, setDistanceKm] = useState<number>(15);
 

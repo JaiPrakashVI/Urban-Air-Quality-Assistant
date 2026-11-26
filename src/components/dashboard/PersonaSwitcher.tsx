@@ -8,6 +8,11 @@ interface PersonaSwitcherProps {
   onSelectPersona: (persona: VulnerabilityProfile) => void;
 }
 
+/**
+ * Household Vulnerability Profile Selector Component.
+ * Enables users to toggle across 6 clinical personas (Asthmatic, Infant Parent, Elderly,
+ * Athlete, Commuter, General Resident), dynamically recalibrating biological risk multipliers (1.0x-1.85x).
+ */
 const PersonaSwitcherComponent: React.FC<PersonaSwitcherProps> = ({
   selectedPersona,
   onSelectPersona,

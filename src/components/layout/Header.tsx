@@ -15,6 +15,11 @@ interface HeaderProps {
   onToggleTheme?: () => void;
 }
 
+/**
+ * Global Top Navigation Bar & Atmospheric Command Header.
+ * Houses brand identity, ARIA 1.2 autocomplete city search combobox, real-time GPS location trigger,
+ * live atmospheric API telemetry sync status, and responsive theme switcher (Light / Dark).
+ */
 const HeaderComponent: React.FC<HeaderProps> = ({
   selectedCity,
   onSelectCity,

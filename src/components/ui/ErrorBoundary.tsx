@@ -11,6 +11,11 @@ interface State {
   error: Error | null;
 }
 
+/**
+ * Top-Level React Error Boundary Component.
+ * Catches unhandled render-tree exceptions, logs structured telemetry via diagnostic logger,
+ * and renders an accessible fallback UI preventing white-screen failure states.
+ */
 export class ErrorBoundary extends Component<Props, State> {
   public state: State = {
     hasError: false,

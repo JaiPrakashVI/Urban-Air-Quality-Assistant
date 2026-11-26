@@ -1,6 +1,10 @@
 import React from 'react';
 import { ShieldCheck, Activity } from 'lucide-react';
 
+/**
+ * Application Content Info & Technical Attribution Footer.
+ * Displays authoritative sources (Open-Meteo, WHO, CPCB) and active evaluation tier badges.
+ */
 const FooterComponent: React.FC = () => {
   return (
     <footer role="contentinfo" className="border-t border-slate-200 dark:border-slate-800/80 bg-white dark:bg-slate-950 py-8 mt-16 text-slate-500 dark:text-slate-400 text-xs transition-colors">
@@ -8,7 +12,7 @@ const FooterComponent: React.FC = () => {
         {/* Left: Brand & Tagline */}
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold">
-            <ShieldCheck className="w-4 h-4" />
+            <ShieldCheck className="w-4 h-4" aria-hidden="true" />
           </div>
           <div>
             <div className="font-extrabold text-slate-900 dark:text-white text-sm">AeroShield</div>

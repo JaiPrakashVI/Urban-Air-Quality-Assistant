@@ -11,6 +11,11 @@ interface ChatAssistantProps {
   cityName: string;
 }
 
+/**
+ * Conversational Intelligence Assistant Component.
+ * Integrates Google Gemini 1.5 Flash with deterministic edge rule trees, providing
+ * context-aware, clinically grounded smog navigation, prompt injection security, and quick guides.
+ */
 const ChatAssistantComponent: React.FC<ChatAssistantProps> = ({
   telemetry,
   persona,
