@@ -118,7 +118,7 @@ const PersonaSwitcherComponent: React.FC<PersonaSwitcherProps> = ({
                   </div>
                 </div>
 
-                <div className="text-xs font-semibold text-slate-900 dark:text-white group-hover:text-emerald-700 dark:group-hover:text-emerald-300 transition-colors truncate">
+                <div className="text-xs font-semibold text-slate-900 dark:text-white group-hover:text-emerald-700 dark:group-hover:text-emerald-300 transition-colors leading-snug line-clamp-2 min-h-[32px] flex items-center">
                   {p.title.split('/')[0].split('(')[0].trim()}
                 </div>
                 <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-1">
