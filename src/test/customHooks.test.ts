@@ -2,6 +2,8 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { INDIAN_CITIES } from '../services/openMeteoApi';
 import { PERSONA_PROFILES, calculatePersonalRisk } from '../engines/vulnerabilityEngine';
 import { calculateIaqMitigation } from '../engines/iaqMitigationEngine';
+import { logger } from '../utils/logger';
+import { ErrorBoundary } from '../components/ui/ErrorBoundary';
 
 // Node environment storage mock
 class LocalStorageMock {
@@ -112,5 +114,27 @@ Ventilation: ${testIaq.bestVentilationHour}`;
   it('safely handles non-browser environments for geolocation checking', () => {
     const isSupported = typeof navigator !== 'undefined' && Boolean(navigator.geolocation);
     expect(typeof isSupported).toBe('boolean');
+  });
+
+  it('guarantees diagnostic logger executes without throwing in any runtime environment', () => {
+    expect(() => {
+      logger.info('Test diagnostic info message', { metric: 100 });
+      logger.warn('Test diagnostic warning message', { retry: true });
+      logger.error('Test diagnostic error message', new Error('Simulated'));
+    }).not.toThrow();
+  });
+
+  it('transitions ErrorBoundary state to hasError=true upon catching an unhandled error', () => {
+    const testError = new Error('Simulated runtime failure');
+    const newState = ErrorBoundary.getDerivedStateFromError(testError);
+    expect(newState.hasError).toBe(true);
+    expect(newState.error).toBe(testError);
+  });
+
+  it('validates city lookup by ID algorithm consistency', () => {
+    const findCityById = (id: string) => INDIAN_CITIES.find(c => c.id === id);
+    expect(findCityById('delhi')).toBeDefined();
+    expect(findCityById('mumbai')).toBeDefined();
+    expect(findCityById('non-existent-id')).toBeUndefined();
   });
 });

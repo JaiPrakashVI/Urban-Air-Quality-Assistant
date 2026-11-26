@@ -53,6 +53,10 @@ const EcoCommuteCalculatorComponent: React.FC<EcoCommuteCalculatorProps> = ({ te
               max="40"
               step="1"
               value={distanceKm}
+              aria-valuemin={3}
+              aria-valuemax={40}
+              aria-valuenow={distanceKm}
+              aria-valuetext={`${distanceKm} kilometers`}
               onChange={(e) => setDistanceKm(Number(e.target.value))}
               className="w-28 accent-emerald-500 cursor-pointer"
               aria-label="Commute distance in kilometers"

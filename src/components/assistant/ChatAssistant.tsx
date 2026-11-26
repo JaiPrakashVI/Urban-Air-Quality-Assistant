@@ -10,7 +10,7 @@ interface ChatAssistantProps {
   cityName: string;
 }
 
-export const ChatAssistant: React.FC<ChatAssistantProps> = ({
+const ChatAssistantComponent: React.FC<ChatAssistantProps> = ({
   telemetry,
   persona,
   cityName,
@@ -304,3 +304,5 @@ How can I help protect you and your family today? Select one of the quick scenar
     </section>
   );
 };
+
+export const ChatAssistant = React.memo(ChatAssistantComponent);

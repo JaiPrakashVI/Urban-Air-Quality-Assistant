@@ -42,6 +42,7 @@ const RiskScoreCardComponent: React.FC<RiskScoreCardProps> = ({ assessment, pers
   return (
     <section 
       aria-labelledby="risk-score-heading"
+      aria-live="polite"
       className="glass-card rounded-2xl p-5 sm:p-6 shadow-xs transition-all flex flex-col justify-between"
     >
       <div>

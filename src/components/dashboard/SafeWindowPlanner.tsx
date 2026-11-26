@@ -57,10 +57,16 @@ const SafeWindowPlannerComponent: React.FC<SafeWindowPlannerProps> = ({
         </div>
 
         {/* Activity Segmented Pills Switcher */}
-        <div className="flex flex-wrap gap-1.5 p-1.5 bg-slate-100 dark:bg-slate-950/70 rounded-2xl border border-slate-200 dark:border-white/5 mb-5">
+        <div 
+          role="radiogroup" 
+          aria-label="Select outdoor activity type" 
+          className="flex flex-wrap gap-1.5 p-1.5 bg-slate-100 dark:bg-slate-950/70 rounded-2xl border border-slate-200 dark:border-white/5 mb-5"
+        >
           {activities.map((a) => (
             <button
               key={a.id}
+              role="radio"
+              aria-checked={activityType === a.id}
               onClick={() => setActivityType(a.id)}
               className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                 activityType === a.id

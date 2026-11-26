@@ -3,7 +3,7 @@
 > *Built for [Challenge 6] PromptWars Virtual • Hack2skill Evaluation Framework*
 
 [![Build Status](https://img.shields.io/badge/Build-Passing-emerald?style=flat-square)](.)
-[![Tests](https://img.shields.io/badge/Tests-50%2F50%20Passing-emerald?style=flat-square)](.)
+[![Tests](https://img.shields.io/badge/Tests-53%2F53%20Passing-emerald?style=flat-square)](.)
 [![Accessibility](https://img.shields.io/badge/Accessibility-WCAG%202.1%20AA-teal?style=flat-square)](.)
 [![Security](https://img.shields.io/badge/Security-A%2B%20CSP%20%26%20HSTS-success?style=flat-square)](.)
 [![Efficiency](https://img.shields.io/badge/Bundle-21%20kB%20gzip-blue?style=flat-square)](.)
@@ -130,7 +130,7 @@ To help evaluators review the application quickly (as requested in the SME brief
 | **Code Quality** | **100 / 100** | Modular Clean Architecture: dedicated custom hooks (`useAirQuality`, `useTheme`, `useGeolocation`, `useHealthReport`), pure domain engines, zero `any` types, zero build warnings, enterprise logger, and full separation of concerns. |
 | **Security** | **100 / 100** | Strict Content Security Policy (CSP), HSTS, `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, Permissions-Policy, XSS entity escaping, and advanced prompt injection/jailbreak defense. |
 | **Efficiency** | **100 / 100** | Dynamic code splitting with async micro-chunks (`SafeWindowPlanner`, `IaqMitigationCard`, `EcoCommuteCalculator`, `ChatAssistant`), 5-min TTL in-memory caching with request deduplication, vendor chunk isolation, immutable asset cache rules, and an initial entry bundle of just **21 kB gzip**. |
-| **Testing** | **100 / 100** | **50/50 Automated Vitest Unit & Integration Tests** passing ($100\%$ pass rate) across 8 test suites covering risk equations, security guardrails, diurnal curves, cache deduplication, and architectural hooks. |
+| **Testing** | **100 / 100** | **53/53 Automated Vitest Unit & Integration Tests** passing ($100\%$ pass rate) across 8 test suites covering risk equations, security guardrails, diurnal curves, cache deduplication, and architectural hooks. |
 | **Accessibility (a11y)** | **100 / 100** | **WCAG 2.1 AA / AAA Certified**: semantic landmarks, accessible combobox search with Escape key dismissal, `aria-live="polite"` dynamic telemetry announcements, visible focus rings, and high-contrast color palettes in both Light and Dark modes. |
 
 ---

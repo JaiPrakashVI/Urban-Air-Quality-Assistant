@@ -44,6 +44,8 @@ const AqiHeroCardComponent: React.FC<AqiHeroCardProps> = ({
   return (
     <section 
       aria-labelledby="aqi-hero-heading"
+      aria-live="polite"
+      aria-atomic="true"
       className="glass-card rounded-3xl p-6 sm:p-8 relative overflow-hidden shadow-2xl transition-all"
     >
       {/* Dynamic Background Radial Aura */}
@@ -104,7 +106,12 @@ const AqiHeroCardComponent: React.FC<AqiHeroCardProps> = ({
         <div className="lg:col-span-5 flex flex-col items-center justify-center p-4 bg-slate-50/80 dark:bg-slate-950/60 rounded-2xl border border-slate-200 dark:border-white/5 relative">
           <div className="relative w-56 h-36 flex items-center justify-center overflow-hidden">
             {/* SVG Speedometer Gauge */}
-            <svg viewBox="0 0 200 110" className="w-full h-full">
+            <svg 
+              viewBox="0 0 200 110" 
+              className="w-full h-full"
+              role="img"
+              aria-label={`Air Quality Index gauge showing ${telemetry.aqi}, categorized as ${telemetry.category}`}
+            >
               <defs>
                 <linearGradient id="aqiArcGradient" x1="0%" y1="0%" x2="100%" y2="0%">
                   <stop offset="0%" stopColor="#10B981" />
@@ -227,6 +234,8 @@ const AqiHeroCardComponent: React.FC<AqiHeroCardProps> = ({
                 <button
                   key={cId}
                   onClick={() => onSelectCityId(cId)}
+                  aria-label={`Select ${city.name} air quality data`}
+                  aria-pressed={isSelected}
                   className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 ${
                     isSelected
                       ? 'bg-emerald-600 text-white shadow-sm ring-2 ring-emerald-500/50'
@@ -254,7 +263,15 @@ const AqiHeroCardComponent: React.FC<AqiHeroCardProps> = ({
             <span className="text-2xl font-black text-rose-600 dark:text-rose-400">{telemetry.pm25}</span>
           </div>
           <div className="w-full bg-slate-200 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
-            <div className="bg-rose-500 h-full rounded-full" style={{ width: `${Math.min(100, pm25Ratio)}%` }} />
+            <div 
+              role="progressbar"
+              aria-valuenow={telemetry.pm25}
+              aria-valuemin={0}
+              aria-valuemax={150}
+              aria-label="PM2.5 particulate level"
+              className="bg-rose-500 h-full rounded-full" 
+              style={{ width: `${Math.min(100, pm25Ratio)}%` }} 
+            />
           </div>
           <span className="text-[10px] text-slate-500 dark:text-slate-400 mt-1.5">Fine soot</span>
         </div>
@@ -269,7 +286,15 @@ const AqiHeroCardComponent: React.FC<AqiHeroCardProps> = ({
             <span className="text-2xl font-black text-amber-600 dark:text-amber-400">{telemetry.pm10}</span>
           </div>
           <div className="w-full bg-slate-200 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
-            <div className="bg-amber-500 h-full rounded-full" style={{ width: `${Math.min(100, pm10Ratio)}%` }} />
+            <div 
+              role="progressbar"
+              aria-valuenow={telemetry.pm10}
+              aria-valuemin={0}
+              aria-valuemax={250}
+              aria-label="PM10 coarse dust level"
+              className="bg-amber-500 h-full rounded-full" 
+              style={{ width: `${Math.min(100, pm10Ratio)}%` }} 
+            />
           </div>
           <span className="text-[10px] text-slate-500 dark:text-slate-400 mt-1.5">Coarse dust</span>
         </div>
@@ -284,7 +309,15 @@ const AqiHeroCardComponent: React.FC<AqiHeroCardProps> = ({
             <span className="text-2xl font-black text-cyan-600 dark:text-cyan-400">{telemetry.no2}</span>
           </div>
           <div className="w-full bg-slate-200 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
-            <div className="bg-cyan-500 h-full rounded-full" style={{ width: `${Math.min(100, no2Ratio)}%` }} />
+            <div 
+              role="progressbar"
+              aria-valuenow={telemetry.no2}
+              aria-valuemin={0}
+              aria-valuemax={150}
+              aria-label="NO2 traffic exhaust level"
+              className="bg-cyan-500 h-full rounded-full" 
+              style={{ width: `${Math.min(100, no2Ratio)}%` }} 
+            />
           </div>
           <span className="text-[10px] text-slate-500 dark:text-slate-400 mt-1.5">Traffic exhaust</span>
         </div>
@@ -299,7 +332,15 @@ const AqiHeroCardComponent: React.FC<AqiHeroCardProps> = ({
             <span className="text-2xl font-black text-teal-600 dark:text-teal-400">{telemetry.so2}</span>
           </div>
           <div className="w-full bg-slate-200 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
-            <div className="bg-teal-500 h-full rounded-full" style={{ width: `${Math.min(100, so2Ratio)}%` }} />
+            <div 
+              role="progressbar"
+              aria-valuenow={telemetry.so2}
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-label="SO2 industrial emissions level"
+              className="bg-teal-500 h-full rounded-full" 
+              style={{ width: `${Math.min(100, so2Ratio)}%` }} 
+            />
           </div>
           <span className="text-[10px] text-slate-500 dark:text-slate-400 mt-1.5">Industrial coal</span>
         </div>
@@ -314,7 +355,15 @@ const AqiHeroCardComponent: React.FC<AqiHeroCardProps> = ({
             <span className="text-2xl font-black text-slate-700 dark:text-slate-100">{telemetry.co}</span>
           </div>
           <div className="w-full bg-slate-200 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
-            <div className="bg-slate-400 h-full rounded-full" style={{ width: `${Math.min(100, coRatio)}%` }} />
+            <div 
+              role="progressbar"
+              aria-valuenow={telemetry.co}
+              aria-valuemin={0}
+              aria-valuemax={4.0}
+              aria-label="CO carbon monoxide level"
+              className="bg-slate-400 h-full rounded-full" 
+              style={{ width: `${Math.min(100, coRatio)}%` }} 
+            />
           </div>
           <span className="text-[10px] text-slate-500 dark:text-slate-400 mt-1.5">Carbon monoxide</span>
         </div>
@@ -329,7 +378,15 @@ const AqiHeroCardComponent: React.FC<AqiHeroCardProps> = ({
             <span className="text-2xl font-black text-purple-600 dark:text-purple-400">{telemetry.o3}</span>
           </div>
           <div className="w-full bg-slate-200 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
-            <div className="bg-purple-500 h-full rounded-full" style={{ width: `${Math.min(100, o3Ratio)}%` }} />
+            <div 
+              role="progressbar"
+              aria-valuenow={telemetry.o3}
+              aria-valuemin={0}
+              aria-valuemax={180}
+              aria-label="Ozone photochemical level"
+              className="bg-purple-500 h-full rounded-full" 
+              style={{ width: `${Math.min(100, o3Ratio)}%` }} 
+            />
           </div>
           <span className="text-[10px] text-slate-500 dark:text-slate-400 mt-1.5">Photochemical</span>
         </div>
