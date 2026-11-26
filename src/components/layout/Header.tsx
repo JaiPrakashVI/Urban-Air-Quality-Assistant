@@ -15,7 +15,7 @@ interface HeaderProps {
   onToggleTheme?: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({
+const HeaderComponent: React.FC<HeaderProps> = ({
   selectedCity,
   onSelectCity,
   telemetry,
@@ -103,12 +103,21 @@ export const Header: React.FC<HeaderProps> = ({
             <Search className="w-4 h-4 text-slate-400 absolute left-3 pointer-events-none" aria-hidden="true" />
             <input
               type="text"
+              role="combobox"
+              aria-expanded={isDropdownOpen}
+              aria-haspopup="listbox"
+              aria-autocomplete="list"
               value={searchQuery}
               onChange={(e) => {
                 setSearchQuery(e.target.value);
                 setIsDropdownOpen(true);
               }}
               onFocus={() => setIsDropdownOpen(true)}
+              onKeyDown={(e) => {
+                if (e.key === 'Escape') {
+                  setIsDropdownOpen(false);
+                }
+              }}
               placeholder={selectedCity.name ? `Search 35+ cities (Active: ${selectedCity.name})` : "Search any city or district in India..."}
               className="w-full bg-slate-100/90 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-700/80 focus:border-emerald-500 rounded-xl pl-9 pr-8 py-2 text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-emerald-500 transition-all shadow-inner"
               aria-label="Search cities or districts in India"
@@ -255,3 +264,5 @@ export const Header: React.FC<HeaderProps> = ({
     </header>
   );
 };
+
+export const Header = React.memo(HeaderComponent);

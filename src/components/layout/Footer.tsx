@@ -1,9 +1,9 @@
 import React from 'react';
 import { ShieldCheck, Activity } from 'lucide-react';
 
-export const Footer: React.FC = () => {
+const FooterComponent: React.FC = () => {
   return (
-    <footer className="border-t border-slate-200 dark:border-slate-800/80 bg-white dark:bg-slate-950 py-8 mt-16 text-slate-500 dark:text-slate-400 text-xs transition-colors">
+    <footer role="contentinfo" className="border-t border-slate-200 dark:border-slate-800/80 bg-white dark:bg-slate-950 py-8 mt-16 text-slate-500 dark:text-slate-400 text-xs transition-colors">
       <div className="w-full max-w-[1700px] mx-auto px-4 sm:px-6 lg:px-10 flex flex-col md:flex-row items-center justify-between gap-4">
         {/* Left: Brand & Tagline */}
         <div className="flex items-center gap-3">
@@ -38,3 +38,5 @@ export const Footer: React.FC = () => {
     </footer>
   );
 };
+
+export const Footer = React.memo(FooterComponent);

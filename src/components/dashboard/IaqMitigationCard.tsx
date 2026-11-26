@@ -6,7 +6,7 @@ interface IaqMitigationCardProps {
   plan: IaqMitigationPlan;
 }
 
-export const IaqMitigationCard: React.FC<IaqMitigationCardProps> = ({ plan }) => {
+const IaqMitigationCardComponent: React.FC<IaqMitigationCardProps> = ({ plan }) => {
   return (
     <section 
       aria-labelledby="iaq-heading"
@@ -122,3 +122,5 @@ export const IaqMitigationCard: React.FC<IaqMitigationCardProps> = ({ plan }) =>
     </section>
   );
 };
+
+export const IaqMitigationCard = React.memo(IaqMitigationCardComponent);

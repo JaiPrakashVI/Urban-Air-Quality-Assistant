@@ -60,4 +60,25 @@ describe('Activity Planner & Diurnal Smog Engine', () => {
 
     expect(windowResult.rationale).toContain('minute ventilation');
   });
+
+  it('suggests errand consolidation for grocery runs during the solar window', () => {
+    const windowResult = calculateSafeActivityWindows(
+      forecasts,
+      PERSONA_PROFILES.commuter,
+      'grocery_run'
+    );
+
+    expect(windowResult.rationale).toContain('Combine multiple local errands');
+    expect(windowResult.bestWindow).toBeDefined();
+  });
+
+  it('correctly assesses safeForCurrentPersona boolean threshold based on persona maxSafeAqi', () => {
+    // Asthmatic max safe AQI is 50. With 350 base AQI, it should flag unsafe
+    const asthmaticResult = calculateSafeActivityWindows(
+      forecasts,
+      PERSONA_PROFILES.asthmatic,
+      'general'
+    );
+    expect(asthmaticResult.safeForCurrentPersona).toBe(false);
+  });
 });

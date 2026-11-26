@@ -60,4 +60,34 @@ describe('Indoor Air Quality (IAQ) Mitigation Engine', () => {
     expect(plan.diyActionTips.some(t => t.includes('Damp Mop'))).toBe(true);
     expect(plan.diyActionTips.some(t => t.includes('NASA Clean Air'))).toBe(true);
   });
+
+  it('accurately sets boundary threshold for solar convective mixing (hours 12 to 16)', () => {
+    // 11:00 AM - Before convective solar mixing
+    const preNoon = calculateIaqMitigation(moderateTelemetry, 11);
+    expect(preNoon.ventilationRecommendedNow).toBe(false);
+
+    // 12:00 PM - Start of convective window
+    const noon = calculateIaqMitigation(moderateTelemetry, 12);
+    expect(noon.ventilationRecommendedNow).toBe(true);
+
+    // 16:00 PM (4 PM) - End of convective window
+    const fourPm = calculateIaqMitigation(moderateTelemetry, 16);
+    expect(fourPm.ventilationRecommendedNow).toBe(true);
+
+    // 17:00 PM (5 PM) - Evening cooling inversion starts
+    const fivePm = calculateIaqMitigation(moderateTelemetry, 17);
+    expect(fivePm.ventilationRecommendedNow).toBe(false);
+  });
+
+  it('scales purifier runtime monotonically across AQI levels (4h -> 10h -> 18h -> 24h)', () => {
+    const clean = calculateIaqMitigation({ ...moderateTelemetry, aqi: 40 });
+    const poor = calculateIaqMitigation({ ...moderateTelemetry, aqi: 150 });
+    const unhealthy = calculateIaqMitigation({ ...moderateTelemetry, aqi: 250 });
+    const severe = calculateIaqMitigation({ ...moderateTelemetry, aqi: 350 });
+
+    expect(clean.recommendedPurifierRuntimeHours).toBe(4);
+    expect(poor.recommendedPurifierRuntimeHours).toBe(10);
+    expect(unhealthy.recommendedPurifierRuntimeHours).toBe(18);
+    expect(severe.recommendedPurifierRuntimeHours).toBe(24);
+  });
 });

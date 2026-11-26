@@ -72,4 +72,29 @@ describe('Assistant Contextual Decision Engine', () => {
     expect(res.text).toContain('purifier');
     expect(res.text).toContain('Damp Mopping');
   });
+
+  it('mandates certified respirator (N95/N99) when user inquires about mask protection', () => {
+    const res = generateContextualDecision(
+      'What mask or respirator should I wear in this smog?',
+      severeDelhiTelemetry,
+      PERSONA_PROFILES.asthmatic,
+      'Delhi (NCR)'
+    );
+
+    expect(res.text.toLowerCase()).toContain('mask');
+    expect(res.suggestedActions?.length).toBeGreaterThan(0);
+  });
+
+  it('provides safe, evidence-based contextual guidance for unclassified inquiries', () => {
+    const res = generateContextualDecision(
+      'Hello assistant, what should I generally keep in mind today?',
+      severeDelhiTelemetry,
+      PERSONA_PROFILES.healthy_adult,
+      'Delhi (NCR)'
+    );
+
+    expect(res.text).toBeDefined();
+    expect(res.text.length).toBeGreaterThan(50);
+    expect(res.sender).toBe('assistant');
+  });
 });

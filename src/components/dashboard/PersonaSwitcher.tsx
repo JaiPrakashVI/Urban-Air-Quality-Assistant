@@ -8,7 +8,7 @@ interface PersonaSwitcherProps {
   onSelectPersona: (persona: VulnerabilityProfile) => void;
 }
 
-export const PersonaSwitcher: React.FC<PersonaSwitcherProps> = ({
+const PersonaSwitcherComponent: React.FC<PersonaSwitcherProps> = ({
   selectedPersona,
   onSelectPersona,
 }) => {
@@ -137,3 +137,5 @@ export const PersonaSwitcher: React.FC<PersonaSwitcherProps> = ({
     </section>
   );
 };
+
+export const PersonaSwitcher = React.memo(PersonaSwitcherComponent);

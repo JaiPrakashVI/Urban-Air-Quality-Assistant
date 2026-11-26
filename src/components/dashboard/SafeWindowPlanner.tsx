@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { HourlyForecast, VulnerabilityProfile } from '../../types/aqi';
 import { calculateSafeActivityWindows } from '../../engines/activityPlannerEngine';
 import { getAqiCategoryColor } from '../../services/openMeteoApi';
@@ -9,7 +9,7 @@ interface SafeWindowPlannerProps {
   persona: VulnerabilityProfile;
 }
 
-export const SafeWindowPlanner: React.FC<SafeWindowPlannerProps> = ({
+const SafeWindowPlannerComponent: React.FC<SafeWindowPlannerProps> = ({
   forecasts,
   persona,
 }) => {
@@ -17,7 +17,10 @@ export const SafeWindowPlanner: React.FC<SafeWindowPlannerProps> = ({
     'morning_walk' | 'school_commute' | 'outdoor_workout' | 'grocery_run' | 'general'
   >('morning_walk');
 
-  const safeWindow = calculateSafeActivityWindows(forecasts, persona, activityType);
+  const safeWindow = useMemo(
+    () => calculateSafeActivityWindows(forecasts, persona, activityType),
+    [forecasts, persona, activityType]
+  );
 
   const activities = [
     { id: 'morning_walk', label: 'Morning Walk' },
@@ -172,3 +175,5 @@ export const SafeWindowPlanner: React.FC<SafeWindowPlannerProps> = ({
     </section>
   );
 };
+
+export const SafeWindowPlanner = React.memo(SafeWindowPlannerComponent);

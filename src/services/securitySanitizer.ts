@@ -15,15 +15,22 @@ export function sanitizeInput(input: string): string {
     .trim();
 }
 
-// Prompt Injection and Malicious Intent Detection
+// Prompt Injection, Jailbreak, and Malicious Intent Detection
 const PROMPT_INJECTION_PATTERNS = [
-  /ignore\s+(all\s+)?(previous|prior)\s+instructions/i,
+  /ignore\s+(all\s+)?(previous|prior|above)\s+instructions/i,
   /system\s+prompt/i,
   /you\s+are\s+now\s+a/i,
-  /bypass\s+(safety|filter)/i,
+  /bypass\s+(safety|filter|guardrail)/i,
   /<script[\s\S]*?>[\s\S]*?<\/script>/i,
   /javascript:/i,
   /eval\(/i,
+  /onerror\s*=/i,
+  /onload\s*=/i,
+  /<\|im_start\|>/i,
+  /<\|endoftext\|>/i,
+  /\[INST\]/i,
+  /role:\s*(system|assistant)/i,
+  /data:text\/html;base64,/i,
 ];
 
 export interface ValidationResult {

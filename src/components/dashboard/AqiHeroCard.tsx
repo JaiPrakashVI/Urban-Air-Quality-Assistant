@@ -11,7 +11,7 @@ interface AqiHeroCardProps {
   isGpsLocated?: boolean;
 }
 
-export const AqiHeroCard: React.FC<AqiHeroCardProps> = ({
+const AqiHeroCardComponent: React.FC<AqiHeroCardProps> = ({
   telemetry,
   cityName,
   activeCityId,
@@ -352,3 +352,5 @@ export const AqiHeroCard: React.FC<AqiHeroCardProps> = ({
     </section>
   );
 };
+
+export const AqiHeroCard = React.memo(AqiHeroCardComponent);

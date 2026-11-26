@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { PollutantTelemetry } from '../../types/aqi';
 import { calculateCommuteImpact, calculateAvoidedEmissionsAndInhalation } from '../../engines/ecoCommuteEngine';
 import { Compass, Train, Car, Bike, Leaf, Award } from 'lucide-react';
@@ -7,10 +7,18 @@ interface EcoCommuteCalculatorProps {
   telemetry: PollutantTelemetry;
 }
 
-export const EcoCommuteCalculator: React.FC<EcoCommuteCalculatorProps> = ({ telemetry }) => {
+const EcoCommuteCalculatorComponent: React.FC<EcoCommuteCalculatorProps> = ({ telemetry }) => {
   const [distanceKm, setDistanceKm] = useState<number>(15);
-  const comparison = calculateCommuteImpact(telemetry, distanceKm);
-  const avoided = calculateAvoidedEmissionsAndInhalation(telemetry, distanceKm);
+
+  const comparison = useMemo(
+    () => calculateCommuteImpact(telemetry, distanceKm),
+    [telemetry, distanceKm]
+  );
+
+  const avoided = useMemo(
+    () => calculateAvoidedEmissionsAndInhalation(telemetry, distanceKm),
+    [telemetry, distanceKm]
+  );
 
   return (
     <section 
@@ -132,3 +140,5 @@ export const EcoCommuteCalculator: React.FC<EcoCommuteCalculatorProps> = ({ tele
     </section>
   );
 };
+
+export const EcoCommuteCalculator = React.memo(EcoCommuteCalculatorComponent);

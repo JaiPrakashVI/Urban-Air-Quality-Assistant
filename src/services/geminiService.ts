@@ -1,5 +1,6 @@
 import { PollutantTelemetry, VulnerabilityProfile, AssistantMessage } from '../types/aqi';
 import { generateContextualDecision } from '../engines/assistantDecisionEngine';
+import { logger } from '../utils/logger';
 
 /**
  * Service to interface with Google Gemini API when configured,
@@ -21,7 +22,7 @@ export async function askAssistant(
       const response = await callGeminiApi(apiKey, userQuery, telemetry, persona, cityName, conversationHistory);
       return response;
     } catch (err) {
-      console.warn('[Gemini] Direct GenAI call failed or rate-limited. Falling back to local smart decision engine:', err);
+      logger.warn('Direct GenAI call failed or rate-limited. Falling back to local smart decision engine', err);
       // Fallback seamlessly to local intelligent decision engine
     }
   }

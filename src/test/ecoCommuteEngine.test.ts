@@ -46,4 +46,21 @@ describe('Eco-Commute & Carbon Impact Engine', () => {
     expect(avoided.treesEquivalent).toBeGreaterThan(0);
     expect(avoided.justification).toContain('Choosing the Metro');
   });
+
+  it('linearly scales emissions and inhalation as distance expands from 3 km to 40 km', () => {
+    const shortTrip = calculateAvoidedEmissionsAndInhalation(telemetry, 3);
+    const longTrip = calculateAvoidedEmissionsAndInhalation(telemetry, 30);
+
+    expect(longTrip.avoidedCo2Kg).toBeGreaterThan(shortTrip.avoidedCo2Kg);
+    expect(longTrip.avoidedInhaledPm25Micrograms).toBeGreaterThan(shortTrip.avoidedInhaledPm25Micrograms);
+  });
+
+  it('guarantees clean transit modes remain recommended and non-empty for any valid distance', () => {
+    const comparison = calculateCommuteImpact(telemetry, 25);
+    const recommendedModes = comparison.filter(c => c.recommended);
+
+    expect(recommendedModes.length).toBeGreaterThanOrEqual(2);
+    expect(recommendedModes.some(c => c.mode === 'metro')).toBe(true);
+    expect(recommendedModes.some(c => c.mode === 'electric_bus')).toBe(true);
+  });
 });

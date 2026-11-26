@@ -7,7 +7,7 @@ interface RiskScoreCardProps {
   persona: VulnerabilityProfile;
 }
 
-export const RiskScoreCard: React.FC<RiskScoreCardProps> = ({ assessment, persona }) => {
+const RiskScoreCardComponent: React.FC<RiskScoreCardProps> = ({ assessment, persona }) => {
   const getRiskColor = (level: RiskAssessment['riskLevel']) => {
     switch (level) {
       case 'Critical':
@@ -140,3 +140,5 @@ export const RiskScoreCard: React.FC<RiskScoreCardProps> = ({ assessment, person
     </section>
   );
 };
+
+export const RiskScoreCard = React.memo(RiskScoreCardComponent);

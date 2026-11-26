@@ -1,13 +1,19 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { 
   categorizeAqi, 
   getAqiCategoryColor, 
   generateDiurnalForecast, 
   INDIAN_CITIES,
-  fetchLiveAirQuality 
+  fetchLiveAirQuality,
+  clearTelemetryCache,
+  searchCitiesGeocoding,
+  reverseGeocodeLocation
 } from '../services/openMeteoApi';
 
 describe('Open-Meteo & Atmospheric Telemetry Service', () => {
+  beforeEach(() => {
+    clearTelemetryCache();
+  });
   it('correctly maps numeric AQI values to CPCB/EPA standard categories', () => {
     expect(categorizeAqi(35)).toBe('Good');
     expect(categorizeAqi(75)).toBe('Moderate');
@@ -57,5 +63,38 @@ describe('Open-Meteo & Atmospheric Telemetry Service', () => {
       expect(hour.aqi).toBeGreaterThan(0);
       expect(hour.category).toBeDefined();
     }
+  });
+
+  it('leverages in-memory caching to return instantaneous results for subsequent requests', async () => {
+    const mumbai = INDIAN_CITIES.find(c => c.id === 'mumbai') || INDIAN_CITIES[0];
+    const firstCall = await fetchLiveAirQuality(mumbai);
+    const secondCall = await fetchLiveAirQuality(mumbai);
+
+    expect(firstCall.timestamp).toBe(secondCall.timestamp);
+    expect(firstCall.aqi).toBe(secondCall.aqi);
+  });
+
+  it('deduplicates concurrent in-flight requests for the same city coordinates', async () => {
+    const bengaluru = INDIAN_CITIES.find(c => c.id === 'bengaluru') || INDIAN_CITIES[0];
+    const [callA, callB] = await Promise.all([
+      fetchLiveAirQuality(bengaluru),
+      fetchLiveAirQuality(bengaluru),
+    ]);
+
+    expect(callA.timestamp).toBe(callB.timestamp);
+    expect(callA.aqi).toBe(callB.aqi);
+  });
+
+  it('safely handles empty queries in geocoding search', async () => {
+    const resultsEmpty = await searchCitiesGeocoding('');
+    const resultsShort = await searchCitiesGeocoding('a');
+    expect(resultsEmpty).toEqual([]);
+    expect(resultsShort).toEqual([]);
+  });
+
+  it('falls back to coordinates string when reverse geocoding receives error or times out', async () => {
+    const result = await reverseGeocodeLocation(28.6139, 77.2090);
+    expect(result).toBeDefined();
+    expect(typeof result).toBe('string');
   });
 });
