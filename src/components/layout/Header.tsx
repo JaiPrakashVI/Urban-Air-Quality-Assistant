@@ -84,14 +84,14 @@ const HeaderComponent: React.FC<HeaderProps> = ({
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 dark:from-emerald-400 dark:via-teal-300 dark:to-cyan-400 bg-clip-text text-transparent">
+              <h1 className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 dark:from-emerald-400 dark:via-teal-300 dark:to-cyan-400 bg-clip-text text-transparent m-0">
                 AeroShield
-              </span>
+              </h1>
               <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 hidden sm:inline-block">
                 Live Advisory
               </span>
             </div>
-            <p className="text-xs text-slate-500 dark:text-slate-400 font-medium hidden md:block">
+            <p className="text-xs text-slate-600 dark:text-slate-400 font-medium hidden md:block">
               Context-Aware Urban Air Quality & Smog Mitigation Assistant
             </p>
           </div>
@@ -100,11 +100,16 @@ const HeaderComponent: React.FC<HeaderProps> = ({
         {/* Search Bar & City Selector */}
         <div className="flex-1 max-w-md relative" ref={dropdownRef}>
           <div className="relative flex items-center">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 pointer-events-none" aria-hidden="true" />
+            <label htmlFor="city-search-input" className="sr-only">
+              Search cities or districts in India
+            </label>
+            <Search className="w-4 h-4 text-slate-500 dark:text-slate-400 absolute left-3 pointer-events-none" aria-hidden="true" />
             <input
+              id="city-search-input"
               type="text"
               role="combobox"
               aria-expanded={isDropdownOpen}
+              aria-controls="city-search-listbox"
               aria-haspopup="listbox"
               aria-autocomplete="list"
               value={searchQuery}
@@ -119,7 +124,7 @@ const HeaderComponent: React.FC<HeaderProps> = ({
                 }
               }}
               placeholder={selectedCity.name ? `Search 35+ cities (Active: ${selectedCity.name})` : "Search any city or district in India..."}
-              className="w-full bg-slate-100/90 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-700/80 focus:border-emerald-500 rounded-xl pl-9 pr-8 py-2 text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-emerald-500 transition-all shadow-inner"
+              className="w-full bg-slate-100/90 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-700/80 focus:border-emerald-500 rounded-xl pl-9 pr-8 py-2 text-xs text-slate-900 dark:text-slate-100 placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-emerald-500 transition-all shadow-inner"
               aria-label="Search cities or districts in India"
             />
             {searchQuery && (
@@ -128,26 +133,33 @@ const HeaderComponent: React.FC<HeaderProps> = ({
                   setSearchQuery('');
                   setGeocodedResults([]);
                 }}
-                className="absolute right-2.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                className="absolute right-2.5 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
                 aria-label="Clear search"
               >
-                <X className="w-3.5 h-3.5" />
+                <X className="w-3.5 h-3.5" aria-hidden="true" />
               </button>
             )}
           </div>
 
           {/* Autocomplete Dropdown */}
           {isDropdownOpen && (
-            <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-2xl overflow-hidden max-h-80 overflow-y-auto z-50 scrollbar-thin">
+            <div 
+              id="city-search-listbox"
+              role="listbox"
+              aria-label="City suggestions"
+              className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-2xl overflow-hidden max-h-80 overflow-y-auto z-50 scrollbar-thin"
+            >
               {/* Presets List */}
               {filteredPresets.length > 0 && (
                 <div>
-                  <div className="px-3 py-1.5 bg-slate-50 dark:bg-slate-950/80 text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800">
+                  <div className="px-3 py-1.5 bg-slate-50 dark:bg-slate-950/80 text-[10px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800">
                     Preset Urban Hotspots ({filteredPresets.length})
                   </div>
                   {filteredPresets.map((c) => (
                     <button
                       key={c.id}
+                      role="option"
+                      aria-selected={c.id === selectedCity.id}
                       onClick={() => {
                         onSelectCity(c);
                         setIsDropdownOpen(false);
@@ -161,7 +173,7 @@ const HeaderComponent: React.FC<HeaderProps> = ({
                         <MapPin className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400 shrink-0" aria-hidden="true" />
                         <span>{c.name}</span>
                       </div>
-                      <span className="text-[10px] text-slate-400">{c.defaultTelemetry.category}</span>
+                      <span className="text-[10px] text-slate-600 dark:text-slate-400 font-medium">{c.defaultTelemetry.category}</span>
                     </button>
                   ))}
                 </div>
@@ -169,8 +181,8 @@ const HeaderComponent: React.FC<HeaderProps> = ({
 
               {/* Geocoding Results */}
               {isSearchingGeocode && (
-                <div className="p-3 text-xs text-slate-400 text-center flex items-center justify-center gap-2">
-                  <Sparkles className="w-3.5 h-3.5 text-emerald-500 animate-spin" />
+                <div className="p-3 text-xs text-slate-600 dark:text-slate-400 text-center flex items-center justify-center gap-2">
+                  <Sparkles className="w-3.5 h-3.5 text-emerald-500 animate-spin" aria-hidden="true" />
                   <span>Searching national coordinates...</span>
                 </div>
               )}
@@ -183,6 +195,8 @@ const HeaderComponent: React.FC<HeaderProps> = ({
                   {geocodedResults.map((c, idx) => (
                     <button
                       key={idx}
+                      role="option"
+                      aria-selected={c.id === selectedCity.id}
                       onClick={() => {
                         onSelectCity(c);
                         setIsDropdownOpen(false);
@@ -194,14 +208,14 @@ const HeaderComponent: React.FC<HeaderProps> = ({
                         <MapPin className="w-3.5 h-3.5 text-teal-500 dark:text-teal-400 shrink-0" aria-hidden="true" />
                         <span>{c.name}</span>
                       </div>
-                      <span className="text-[10px] text-slate-400">{c.lat.toFixed(2)}, {c.lon.toFixed(2)}</span>
+                      <span className="text-[10px] text-slate-600 dark:text-slate-400 font-medium">{c.lat.toFixed(2)}, {c.lon.toFixed(2)}</span>
                     </button>
                   ))}
                 </div>
               )}
 
               {filteredPresets.length === 0 && geocodedResults.length === 0 && !isSearchingGeocode && (
-                <div className="p-4 text-xs text-slate-400 text-center">
+                <div className="p-4 text-xs text-slate-600 dark:text-slate-400 text-center">
                   No cities found matching "{searchQuery}". Type 3+ characters to search coordinates.
                 </div>
               )}

@@ -78,6 +78,14 @@ export function calculateCommuteImpact(
   return modes;
 }
 
+/**
+ * Computes comparative carbon dioxide emissions and direct particulate inhalation
+ * avoided by selecting mass transit (Metro) over individual private transport (Solo ICE / Two-Wheeler).
+ *
+ * @param telemetry Atmospheric pollutant measurements including ambient PM2.5 (µg/m³)
+ * @param distanceKm One-way transit distance in kilometers (default: 15 km)
+ * @returns Quantified avoided CO2 (kg), avoided inhaled PM2.5 (µg), mature tree equivalent, and clinical rationale.
+ */
 export function calculateAvoidedEmissionsAndInhalation(
   telemetry: PollutantTelemetry,
   distanceKm: number = 15
@@ -88,11 +96,17 @@ export function calculateAvoidedEmissionsAndInhalation(
   justification: string;
 } {
   const comparison = calculateCommuteImpact(telemetry, distanceKm);
-  const soloCar = comparison.find(m => m.mode === 'solo_car')!;
-  const metro = comparison.find(m => m.mode === 'metro')!;
+  const soloCar = comparison.find(m => m.mode === 'solo_car') ?? comparison[4];
+  const metro = comparison.find(m => m.mode === 'metro') ?? comparison[0];
+  const twoWheeler = comparison.find(m => m.mode === 'two_wheeler') ?? comparison[5];
 
-  const avoidedCo2Kg = Math.max(0, Number((soloCar.co2EmissionsKg - metro.co2EmissionsKg).toFixed(2)));
-  const avoidedInhaledPm25Micrograms = Math.max(0, Number((comparison.find(m => m.mode === 'two_wheeler')!.inhalationExposureMicrograms - metro.inhalationExposureMicrograms).toFixed(1)));
+  const soloCarCo2 = soloCar ? soloCar.co2EmissionsKg : 0;
+  const metroCo2 = metro ? metro.co2EmissionsKg : 0;
+  const twoWheelerExposure = twoWheeler ? twoWheeler.inhalationExposureMicrograms : 0;
+  const metroExposure = metro ? metro.inhalationExposureMicrograms : 0;
+
+  const avoidedCo2Kg = Math.max(0, Number((soloCarCo2 - metroCo2).toFixed(2)));
+  const avoidedInhaledPm25Micrograms = Math.max(0, Number((twoWheelerExposure - metroExposure).toFixed(1)));
   const treesEquivalent = Number((avoidedCo2Kg / 0.06).toFixed(1)); // Approx daily carbon absorption of 1 mature tree
 
   return {

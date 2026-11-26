@@ -33,7 +33,7 @@ export class ErrorBoundary extends Component<Props, State> {
             <div className="w-12 h-12 rounded-xl bg-amber-500/15 text-amber-400 border border-amber-500/30 flex items-center justify-center mx-auto mb-4">
               <AlertTriangle className="w-6 h-6" aria-hidden="true" />
             </div>
-            <h1 className="text-xl font-bold text-white mb-2">AeroShield Diagnostic Notice</h1>
+            <h2 className="text-xl font-bold text-white mb-2">AeroShield Diagnostic Notice</h2>
             <p className="text-xs text-slate-400 mb-6 leading-relaxed">
               An unexpected render issue was safely intercepted. Click below to reload the assistant with calibrated telemetry.
             </p>

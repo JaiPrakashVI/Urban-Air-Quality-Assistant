@@ -22,20 +22,27 @@ describe('Eco-Commute & Carbon Impact Engine', () => {
 
   it('ranks Metro as recommended transit mode with lowest particulate inhalation', () => {
     const comparison = calculateCommuteImpact(telemetry, 15);
-    const metro = comparison.find(c => c.mode === 'metro')!;
-    const twoWheeler = comparison.find(c => c.mode === 'two_wheeler')!;
+    const metro = comparison.find(c => c.mode === 'metro');
+    const twoWheeler = comparison.find(c => c.mode === 'two_wheeler');
 
-    expect(metro.recommended).toBe(true);
-    expect(metro.inhalationExposureMicrograms).toBeLessThan(twoWheeler.inhalationExposureMicrograms);
+    expect(metro).toBeDefined();
+    expect(twoWheeler).toBeDefined();
+    if (metro && twoWheeler) {
+      expect(metro.recommended).toBe(true);
+      expect(metro.inhalationExposureMicrograms).toBeLessThan(twoWheeler.inhalationExposureMicrograms);
+    }
   });
 
   it('proves two-wheeler commutes have highest toxic inhalation exposure', () => {
     const comparison = calculateCommuteImpact(telemetry, 15);
-    const twoWheeler = comparison.find(c => c.mode === 'two_wheeler')!;
+    const twoWheeler = comparison.find(c => c.mode === 'two_wheeler');
     const allOthers = comparison.filter(c => c.mode !== 'two_wheeler');
 
-    for (const other of allOthers) {
-      expect(twoWheeler.inhalationExposureMicrograms).toBeGreaterThan(other.inhalationExposureMicrograms);
+    expect(twoWheeler).toBeDefined();
+    if (twoWheeler) {
+      for (const other of allOthers) {
+        expect(twoWheeler.inhalationExposureMicrograms).toBeGreaterThan(other.inhalationExposureMicrograms);
+      }
     }
   });
 

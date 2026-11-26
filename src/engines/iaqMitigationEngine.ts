@@ -1,5 +1,13 @@
 import { PollutantTelemetry, IaqMitigationPlan } from '../types/aqi';
 
+/**
+ * Derives indoor air quality (IAQ) mitigation protocols based on atmospheric boundary physics,
+ * ambient PM2.5 concentrations, and building envelope infiltration mechanics.
+ *
+ * @param telemetry Real-time atmospheric pollutant and meteorological observations
+ * @param currentHour Local solar hour (0-23, defaults to local system hour)
+ * @returns IaqMitigationPlan with ventilation safety, HEPA purifier mode, and evidence-based actions
+ */
 export function calculateIaqMitigation(
   telemetry: PollutantTelemetry,
   currentHour: number = new Date().getHours()

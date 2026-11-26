@@ -227,13 +227,14 @@ How can I help protect you and your family today? Select one of the quick scenar
                 )}
 
                 {/* Footer details: Timestamp & Copy Button */}
-                <div className="mt-3 pt-2 border-t border-slate-100 dark:border-white/5 flex items-center justify-between text-[10px] text-slate-400 font-mono">
+                <div className="mt-3 pt-2 border-t border-slate-100 dark:border-white/5 flex items-center justify-between text-[10px] text-slate-600 dark:text-slate-400 font-mono">
                   <span>{m.timestamp}</span>
                   {!isUser && (
                     <button
                       onClick={() => copyToClipboard(m.text, m.id)}
-                      className="opacity-0 group-hover:opacity-100 transition-opacity text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 flex items-center gap-1"
+                      className="opacity-0 group-hover:opacity-100 transition-opacity text-slate-500 hover:text-emerald-600 dark:text-slate-400 dark:hover:text-emerald-400 flex items-center gap-1"
                       title="Copy response to clipboard"
+                      aria-label="Copy assistant advice"
                     >
                       {copiedId === m.id ? (
                         <>

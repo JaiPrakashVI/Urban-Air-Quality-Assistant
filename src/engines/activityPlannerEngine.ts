@@ -1,5 +1,14 @@
 import { HourlyForecast, VulnerabilityProfile, SafeActivityWindow } from '../types/aqi';
 
+/**
+ * Evaluates 24-hour diurnal atmospheric dispersion forecasts against persona clinical sensitivity
+ * to identify optimal, lowest-risk outdoor exposure windows.
+ *
+ * @param forecasts Array of 24 hourly atmospheric and AQI predictions
+ * @param persona Selected biological vulnerability profile
+ * @param activityType Specific outdoor activity context (e.g., morning walk, workout)
+ * @returns SafeActivityWindow with optimal time range, clinical rationale, and safety flag
+ */
 export function calculateSafeActivityWindows(
   forecasts: HourlyForecast[],
   persona: VulnerabilityProfile,

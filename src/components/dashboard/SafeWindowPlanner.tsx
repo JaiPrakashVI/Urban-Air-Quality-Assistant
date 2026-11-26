@@ -123,11 +123,11 @@ const SafeWindowPlannerComponent: React.FC<SafeWindowPlannerProps> = ({
 
       {/* 24-Hour Diurnal Timeline */}
       <div>
-        <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 mb-2.5">
-          <span className="font-extrabold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+        <div className="flex items-center justify-between text-xs text-slate-600 dark:text-slate-400 mb-2.5">
+          <span className="font-extrabold uppercase tracking-wider text-slate-800 dark:text-slate-200">
             24-Hour Atmospheric Smog Curve:
           </span>
-          <span className="text-[11px] text-slate-400">Scroll horizontally →</span>
+          <span className="text-[11px] text-slate-600 dark:text-slate-400">Scroll horizontally →</span>
         </div>
 
         <div 
@@ -170,7 +170,7 @@ const SafeWindowPlannerComponent: React.FC<SafeWindowPlannerProps> = ({
                   ) : f.hour >= 5 && f.hour <= 9 ? (
                     <span className="text-rose-600 dark:text-rose-400">Inversion</span>
                   ) : (
-                    <span className="text-slate-400 dark:text-slate-500">Trapped</span>
+                    <span className="text-slate-600 dark:text-slate-400">Trapped</span>
                   )}
                 </div>
               </div>

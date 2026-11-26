@@ -185,9 +185,9 @@ const AqiHeroCardComponent: React.FC<AqiHeroCardProps> = ({
             <span className="text-[11px] font-bold uppercase tracking-widest text-emerald-600 dark:text-emerald-400 block mb-1">
               Atmospheric Diagnostic
             </span>
-            <h1 id="aqi-hero-heading" className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+            <h2 id="aqi-hero-heading" className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
               {cityName}
-            </h1>
+            </h2>
             <p className="text-sm text-slate-600 dark:text-slate-300 mt-2 leading-relaxed">
               Primary Air Contaminant:{' '}
               <strong className="text-emerald-700 dark:text-emerald-300 underline decoration-emerald-500/40 underline-offset-4">
